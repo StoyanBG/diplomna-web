@@ -23,7 +23,7 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     event.preventDefault(); // Prevent the default anchor click behavior
 
     // Check authentication status
-    fetch('/api/check-auth') // Change to /api/check-auth to match your Vercel API
+    fetch('/check-auth') // Change to /api/check-auth to match your Vercel API
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to check authentication');

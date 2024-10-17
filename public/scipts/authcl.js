@@ -2,7 +2,7 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     event.preventDefault(); // Prevent the default anchor click behavior
 
     // Check authentication status
-    fetch('/api/check-auth') // Ensure the path corresponds to your API structure
+    fetch('/check-auth') // Ensure the path corresponds to your API structure
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

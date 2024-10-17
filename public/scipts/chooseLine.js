@@ -20,7 +20,7 @@ function saveChoice() {
   });
 
   // Send a POST request to save the user's choices
-  fetch('/api/save-choice', { // Change to /api/save-choice to match your Vercel API
+  fetch('/save-choice', { // Change to /api/save-choice to match your Vercel API
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'

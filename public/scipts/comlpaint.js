@@ -49,7 +49,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     const messageId = document.getElementById('messageId').value;
     const response = document.getElementById('response').value;
 
-    fetch('/api/respond-message', { // Change to /api/respond-message to match your Vercel API
+    fetch('/respond-message', { // Change to /api/respond-message to match your Vercel API
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
 
 // Redirect to the complaint page
 function redirectToComplaintPage() {
-    fetch('/api/check-auth', { // Change to /api/check-auth to match your Vercel API
+    fetch('/check-auth', { // Change to /api/check-auth to match your Vercel API
         method: 'GET',
         credentials: 'include'
     })
@@ -102,7 +102,7 @@ function redirectToComplaintPage() {
 document.getElementById('main-page-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default anchor click behavior
 
-    fetch('/api/check-auth', { // Change to /api/check-auth to match your Vercel API
+    fetch('/check-auth', { // Change to /api/check-auth to match your Vercel API
         method: 'GET'
     })
     .then(response => {
