@@ -60,7 +60,8 @@ app.post('/login', async (req, res) => {
 
   try {
     const user = await admin.auth().getUserByEmail(email);
-    // Assuming the user is authenticated on the client-side and you received a token
+    // This is where you'd typically validate the password, but Firebase does this on the client side.
+    // Instead, you'd return the user's UID or an ID token to the client here.
     res.json({ message: 'User logged in successfully', userId: user.uid });
   } catch (error) {
     res.status(404).json({ error: 'User not found or invalid credentials' });
@@ -96,9 +97,8 @@ app.post('/save-choice', authenticateUser, async (req, res) => {
 
   try {
     const userChoicesRef = db.ref('choices/' + userId);
-    lineIds.forEach(lineId => {
-      userChoicesRef.push({ lineId });
-    });
+    const promises = lineIds.map(lineId => userChoicesRef.push({ lineId })); // Create an array of promises
+    await Promise.all(promises); // Wait for all write operations to complete
     res.sendStatus(200);
   } catch (error) {
     res.status(500).json({ error: error.message });
