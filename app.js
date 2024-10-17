@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route for user registration
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Route for user login
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -68,32 +68,31 @@ app.post('/login', async (req, res) => {
 });
 
 // Middleware to check if the user is authenticated
-function authenticateUser(req, res, next) {
-  // Token-based auth logic should replace session-based logic
-  next(); // For now, continue without checking authentication
+async function authenticateUser(req, res, next) {
+  const token = req.headers.authorization?.split('Bearer ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    req.userId = decodedToken.uid; // Store user ID for later use
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
 }
 
 // Route for checking user authentication
-app.get('/check-auth', (req, res) => {
-  res.json({ isAuthenticated: true }); // Dummy response for now
+app.get('/api/check-auth', authenticateUser, (req, res) => {
+  res.json({ isAuthenticated: true }); // User is authenticated
 });
 
-app.get('/selected-lines', authenticateUser, async (req, res) => {
-  const userId = req.session.userId;
-
-  try {
-    const snapshot = await db.ref('choices/' + userId).once('value');
-    const choices = snapshot.val() || {};
-    const lineIds = Object.values(choices).map(choice => choice.lineId);
-    res.json(lineIds);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 // Route for saving user choices
-app.post('/save-choice', authenticateUser, (req, res) => {
+app.post('/api/save-choice', authenticateUser, async (req, res) => {
   const { lineIds } = req.body;
-  const userId = req.session.userId;
+  const userId = req.userId; // Use the authenticated user ID
 
   try {
     const userChoicesRef = db.ref('choices/' + userId);
@@ -105,6 +104,21 @@ app.post('/save-choice', authenticateUser, (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Route for fetching selected lines
+app.get('/api/selected-lines', authenticateUser, async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const snapshot = await db.ref('choices/' + userId).once('value');
+    const choices = snapshot.val() || {};
+    const lineIds = Object.values(choices).map(choice => choice.lineId);
+    res.json(lineIds);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
