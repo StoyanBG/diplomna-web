@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/lines.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    
+</head>
+
+<body>
+  <nav>
+    <div class="nav-left">
+        <ul class="menu">
+            <li class="menu-item">
+                <a href="#">
+                    <div class="hamburger">
+                        <div></div>
+                    </div>
+                </a>
+                <ul class="submenu">
+                  <li class="menu-item"><a href="/allLines.html" ><h6>Всички линии</h6></a></li>
+                    <li class="menu-item"id="main-page-button"><a href="/cl.html" ><h6>Избор на любими линии</h6></a></li>
+                    <li class="menu-item"><a href="/fl.html" ><h6>Любими линии</h6></a></li>
+                    <li class="menu-item">
+                      <a href="/feedback.html"><h6>Изпратете отзив</h6></a>
+                    </li>
+                    <li class="menu-item"><a href="/index.html" ><h6>Сегашни проблеми</h6></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="nav-center">
+        <span><h4>Пловдив транспорт</h4></span>
+    </div>
+    <div class="nav-right">
+      <span >
+        <a style="text-decoration: none; color: black;" href="/index.html"><button type="button" class="btn btn-primary"><h5>Изход</h5></button> </a>
+      </span>
+    </div>
+</nav>
+<section>
+  <h2>Кой е следващия автобус?</h2>
+  <p>Въведете час за да разберете</p>
+  <input type="time" id="userTime" required>
+  <button onclick="findNextBus()" class="btn btn-primary">Намерете следващия автобус</button>
+  
+  <p id="result"></p>
+
+  
+  
+</section>
+
+<h1>Път на линия 27</h1>
+<div id="map"></div>
+    <footer>
+        <ul class="footer-links">
+          <li><a href="/privacy.html">Политика за поверителност</a></li>
+          <li><a href="/feedback.html">Свържете се с нас</a></li>
+      </ul>
+        <hr>
+        <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
+    </footer>
+    <script src="../scipts/27.js"></script>
+    <script src="../scipts/authcl.js"></script>
+</body>
+</html>

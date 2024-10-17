@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints and Responses</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navFirst.css">
+    <link rel="stylesheet" href="css/complaints.css">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html"><h1>Пловдив транспорт</h1></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="allLines.html" id="main-page-button">Всички линии</a></li>
+                <li><a onclick="redirectToComplaintPage()">Съобщете за проблем</a></li>
+                <li><a href="feedback.html">Свържете се с нас</a></li>
+                <li><a href="login.html">Влизане</a></li>
+                <li><a href="registration.html">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="real-time-info">
+            <section class="complaints">
+                <h2>Подадени проблеми и отговори</h2>
+                <ul id="complaintsList" class="complaints-list">
+                    <!-- Complaints will be loaded here -->
+                </ul>
+            </section>
+        </section>
+        
+        <form id="responseForm" style="display: none;">
+            <section class="response-form">
+                <h2>Отговорете на проблем</h2>
+                <label for="response">Отговор:</label>
+                <textarea id="response" name="response" required></textarea>
+                <input type="hidden" id="messageId" name="messageId" required>
+                <button type="submit" class="btn btn-primary">Изпратете отговор</button>
+            </section>
+        </form>
+        
+        <div id="responseStatus"></div>
+        
+    </main>
+
+    <footer>
+        <ul class="footer-links">
+            <li><a href="/privacy.html">Политика за поверителност</a></li>
+            <li><a href="/feedback.html">Свържете се с нас</a></li>
+        </ul>
+        <hr>
+        <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
+    </footer>
+    <script src="scipts/comlpaint.js"></script>
+</body>
+</html>

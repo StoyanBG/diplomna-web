@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bus Transportation Plovdiv</title>
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navFirst.css">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html"><h1>Пловдив транспорт</h1></a>
+            </div>
+        </nav>
+
+    </header>
+    <div class="reg-container">
+        <div class="reg-box">
+            <h2>Създайте профил</h2>
+            <form id="registrationForm">
+                <div class="input-group">
+                    <label for="name">Име</label>
+                    <input type="text" id="name" name="name"  placeholder="Enter your full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Е-мейл</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Парола</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Повторете паролата</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Регистриране</button>
+                <p class="login-help">Вече имате профил? <a href="login.html">Влезте тук</a>.</p>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <ul class="footer-links">
+            <li><a href="/privacy.html">Политика за поверителност</a></li>
+            <li><a href="/feedback.html">Свържете се с нас</a></li>
+        </ul>
+        <hr>
+        <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
+    </footer>
+    <script src="scipts/scriptReg.js"></script>
+</body>
+</html>

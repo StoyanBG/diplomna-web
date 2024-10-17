@@ -1,0 +1,26 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.real-time-info {
+    background-color: #fff;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    margin: 2rem auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+}
+
+.real-time-info h2 {
+    color: #007bff;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.real-time-info p {
+    font-size: 1.2rem;
+}

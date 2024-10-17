@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint</title>
+    <link rel="stylesheet" href="css/service.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navFirst.css">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html"><h1>Пловдив транспорт</h1></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="allLines.html" id="main-page-button">Всички линии</a></li>
+                <li><a href="complaint.html">Проблеми</a></li>
+                <li><a href="feedback.html">Свържете се с нас</a></li>
+                <li><a href="login.html">Влизане</a></li>
+                <li><a href="registration.html">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="complaint-form">
+        <h2>Напишете вашия проблем</h2>
+        <form id="complaintForm">
+            <label for="subject">Тема:</label>
+            <input type="text" id="subject" name="subject" required >
+            <label for="message">Съобщение:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Подай</button>
+        </form>
+        <div id="responseMessage"></div>
+    </section>
+    <footer>
+        <ul class="footer-links">
+            <li><a href="/privacy.html">Политика за поверителност</a></li>
+            <li><a href="/feedback.html">Свържете се с нас</a></li>
+        </ul>
+        <hr>
+        <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
+    </footer>
+    <script src="css/service.css"></script>
+</body>
+</html>

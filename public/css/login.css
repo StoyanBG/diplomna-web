@@ -1,0 +1,73 @@
+
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+input{
+    max-width: 94%;
+
+}
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 100%; /* Ensure the input-group takes the full width */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%; /* Make the input field take the full width */
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.input-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+/* Login/Register Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 78.3vh;
+    background-color: #f4f4f4;
+}
+
+.login-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Set a max-width for the login box */
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #007bff;
+}
+.login-help {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.login-help a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-help a:hover {
+    text-decoration: underline;
+}

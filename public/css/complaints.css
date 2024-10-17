@@ -1,0 +1,79 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+.complaints-list {
+    list-style-type: none;
+    padding: 0;
+}
+.complaint-item {
+    background: linear-gradient(145deg, #f4f4f4, #e1e1e1); /* Gradient background for depth */
+    border-radius: 15px; /* More moderate rounded corners */
+    padding: 15px; /* Increased padding for better spacing */
+    margin-bottom: 15px; /* Space between items */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
+    transition: transform 0.2s; /* Smooth transition for hover effect */
+}
+.response-form {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.response-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.response-form textarea{
+ width: 99.6%;
+}
+.response-form input,
+
+.response-form button {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.response-form button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.response-form button:hover {
+    background-color: #555;
+}
+
+/* Response Message */
+#responseMessage {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+.real-time-info {
+    background-color: #fff;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    margin: 2rem auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+}
+
+.real-time-info h2 {
+    color: #007bff;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.real-time-info p {
+    font-size: 1.2rem;
+}
