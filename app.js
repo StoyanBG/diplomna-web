@@ -78,16 +78,33 @@ app.get('/check-auth', (req, res) => {
   res.json({ isAuthenticated: true }); // Dummy response for now
 });
 
+app.get('/selected-lines', authenticateUser, async (req, res) => {
+  const userId = req.session.userId;
+
+  try {
+    const snapshot = await db.ref('choices/' + userId).once('value');
+    const choices = snapshot.val() || {};
+    const lineIds = Object.values(choices).map(choice => choice.lineId);
+    res.json(lineIds);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 // Route for saving user choices
 app.post('/save-choice', authenticateUser, (req, res) => {
   const { lineIds } = req.body;
   const userId = req.session.userId;
 
-  db.ref('users/' + userId + '/choices').set(lineIds)
-    .then(() => res.json({ message: 'Choices saved successfully' }))
-    .catch(error => res.status(500).json({ error: error.message }));
+  try {
+    const userChoicesRef = db.ref('choices/' + userId);
+    lineIds.forEach(lineId => {
+      userChoicesRef.push({ lineId });
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
-
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
