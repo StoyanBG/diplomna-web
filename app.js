@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route for user registration
-app.post('/api/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -55,7 +55,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 // Route for user login
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -85,12 +85,12 @@ async function authenticateUser(req, res, next) {
 }
 
 // Route for checking user authentication
-app.get('/api/check-auth', authenticateUser, (req, res) => {
+app.get('/check-auth', authenticateUser, (req, res) => {
   res.json({ isAuthenticated: true }); // User is authenticated
 });
 
 // Route for saving user choices
-app.post('/api/save-choice', authenticateUser, async (req, res) => {
+app.post('/save-choice', authenticateUser, async (req, res) => {
   const { lineIds } = req.body;
   const userId = req.userId; // Use the authenticated user ID
 
@@ -106,7 +106,7 @@ app.post('/api/save-choice', authenticateUser, async (req, res) => {
 });
 
 // Route for fetching selected lines
-app.get('/api/selected-lines', authenticateUser, async (req, res) => {
+app.get('/selected-lines', authenticateUser, async (req, res) => {
   const userId = req.userId;
 
   try {
