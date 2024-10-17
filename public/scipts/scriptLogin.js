@@ -2,7 +2,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   event.preventDefault(); // Prevent default form submission
   const formData = new FormData(this);
 
-  fetch('/api/login', { // Update to /api/login to match your Vercel API
+  fetch('/login', { // Update to /api/login to match your Vercel API
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
