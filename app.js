@@ -55,17 +55,25 @@ app.post('/register', async (req, res) => {
 });
 
 // Route for user login
+// Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await admin.auth().getUserByEmail(email);
-    // This is where you'd typically validate the password, but Firebase does this on the client side.
-    // Instead, you'd return the user's UID or an ID token to the client here.
-    res.json({ message: 'User logged in successfully', userId: user.uid });
+    // Validate the user's email and password on the client-side.
+    // You can create a custom token here, but it's typically handled on the client.
+    const userRecord = await admin.auth().getUserByEmail(email);
+
+    // Since Firebase does not support password verification on the server,
+    // the client should authenticate using Firebase Authentication SDK.
+    // Instead, send back the user's UID or create a custom token if needed.
+    const customToken = await admin.auth().createCustomToken(userRecord.uid); // Create a custom token
+    res.json({ message: 'User logged in successfully', token: customToken }); // Return the custom token
   } catch (error) {
     res.status(404).json({ error: 'User not found or invalid credentials' });
   }
+});
+
 });
 
 // Middleware to check if the user is authenticated
