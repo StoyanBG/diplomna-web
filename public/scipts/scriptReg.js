@@ -10,7 +10,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
       return;
   }
 
-  fetch('/api/register', { // Update to /api/register to match your Vercel API
+  fetch('/register', { // Update to /api/register to match your Vercel API
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
