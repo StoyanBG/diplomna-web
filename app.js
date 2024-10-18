@@ -80,7 +80,7 @@ app.post('/register', async (req, res) => {
     // Insert the new user into the Supabase database
     const { data: newUser, error: insertError } = await supabase
       .from('users')
-      .insert([{ name, email, password }])  // Hash password in production
+      .insert([{ name, email, password }])
       .select('*')
       .single();
 
@@ -91,7 +91,7 @@ app.post('/register', async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ message: 'User registered successfully', token }); // Return the token
+    res.json({ message: 'User registered successfully', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -116,7 +116,7 @@ app.post('/login', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the password matches (in production, compare hashed passwords)
+    // Check if the password matches (using plain text for this example)
     if (user.password !== password) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
