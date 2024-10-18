@@ -58,7 +58,7 @@ async function addUser(user) {
 }
 
 // Route for user registration
-app.post('/api/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
