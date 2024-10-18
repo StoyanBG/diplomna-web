@@ -62,26 +62,34 @@ app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const existingUser = await getUserByEmail(email);
+    // Check if the user already exists
+    const { data: existingUser, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();  // Ensures only one row is returned
 
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    const newUser = {
-      name,
-      email,
-      password, // In production, hash the password
-      created_at: new Date().toISOString(),
-    };
+    // Insert the new user into the Supabase database
+    const { data: newUser, error: insertError } = await supabase
+      .from('users')
+      .insert([{ name, email, password }])  // Hash password in production
+      .select('*')
+      .single();  // Ensures only one row is returned
 
-    await addUser(newUser);
+    if (insertError) {
+      throw new Error(insertError.message);
+    }
 
     res.json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Authentication middleware
 function authenticateUser(req, res, next) {
