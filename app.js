@@ -159,7 +159,7 @@ app.get('/check-auth', (req, res) => {
 // Route for saving user choices
 app.post('/save-choice', authenticateUser, async (req, res) => {
   const { lineIds } = req.body;
-  const userId = req.session.userId;
+  const userId = req.user.userId;
 
   try {
     const { data, error } = await supabase
