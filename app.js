@@ -3,7 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Database = require('better-sqlite3');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs'); // Change here: Use bcryptjs instead of bcrypt
 const jwt = require('jsonwebtoken');
 
 // Initialize Turso (SQLite) database
