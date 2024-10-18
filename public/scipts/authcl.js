@@ -1,26 +1,26 @@
 document.getElementById('main-page-button').addEventListener('click', function(event) { 
-    event.preventDefault(); // Prevent the default anchor click behavior
+    event.preventDefault(); // Prevent default behavior of the button click
 
-    // Check authentication status
-    fetch('/check-auth') // Ensure the path corresponds to your API structure
+    // Fetch the user's authentication status from the server
+    fetch('/check-auth') // Updated path for API consistency
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Failed to check authentication status');
             }
-            return response.json();
+            return response.json(); // Parse the JSON response
         })
         .then(data => {
             if (data.isAuthenticated) {
-                // Redirect to cl.html if authenticated
-                window.location.href = '../cl.html';
+                // If the user is authenticated, redirect to the cl.html page
+                window.location.href = '../cl.html'; // Adjusted the path for Vercel deployment
             } else {
-                // Redirect to login.html if not authenticated
+                // If not authenticated, redirect to the login.html page
                 window.location.href = '../login.html';
             }
         })
         .catch(error => {
             console.error('Error checking authentication:', error);
-            // Handle error, maybe redirect to login or show a message
+            // On error, redirect to the login page as a fallback
             window.location.href = '../login.html';
         });
 });

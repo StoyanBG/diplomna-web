@@ -26,11 +26,11 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return response.json(); // Parse the JSON response
     })
     .then(data => {
-        // Store the token in localStorage for persistence across browser sessions
-        localStorage.setItem('token', data.token);
+        // Use sessionStorage for session-scoped storage instead of localStorage
+        sessionStorage.setItem('token', data.token);
 
-        // Redirect to fl.html with the token as a query parameter
-        window.location.href = `../fl.html?token=${data.token}`; 
+        // Redirect to fl.html (Avoid passing token in query parameters for security reasons)
+        window.location.href = '../fl.html';
     })
     .catch(error => {
         alert(error.message); // Display an error message to the user

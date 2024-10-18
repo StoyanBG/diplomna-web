@@ -3,7 +3,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
     const subject = document.getElementById('subject').value; // Get the subject value
     const message = document.getElementById('message').value; // Get the message value
 
-    fetch('/send-message', { // Update to /api/send-message to match your Vercel API
+    fetch('/send-message', { // Updated to /api/send-message for Vercel API
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -11,9 +11,16 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
         credentials: 'include', // Include credentials for authentication
         body: JSON.stringify({ subject, message }) // Send subject and message as JSON
     })
-    .then(response => response.text()) // Parse response as text
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage); // Capture any error message
+            });
+        }
+        return response.text(); // Parse response as text
+    })
     .then(data => {
-        document.getElementById('responseMessage').textContent = data; // Display response message
+        document.getElementById('responseMessage').textContent = 'Complaint sent successfully!'; // Display success message
         document.getElementById('complaintForm').reset(); // Reset form fields
     })
     .catch(error => {
@@ -25,8 +32,13 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
 document.getElementById('main-page-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default anchor click behavior
 
-    fetch('/check-auth') // Update to /api/check-auth for consistent API routing
-        .then(response => response.json())
+    fetch('/check-auth') // Updated to /api/check-auth for consistent API routing
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to check authentication'); // Throw an error if response not ok
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.isAuthenticated) {
                 // Redirect to success.html if authenticated
@@ -38,7 +50,6 @@ document.getElementById('main-page-button').addEventListener('click', function(e
         })
         .catch(error => {
             console.error('Error checking authentication:', error); // Log any errors
-            // Handle error, maybe redirect to login or show a message
-            window.location.href = '../login.html';
+            window.location.href = '../login.html'; // Redirect to login on error
         });
 });

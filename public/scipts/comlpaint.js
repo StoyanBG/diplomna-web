@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', fetchComplaints);
 
 function fetchComplaints() {
-    fetch('/api/get-complaints') // Change to /api/get-complaints to match your Vercel API
+    fetch('/get-complaints') // Updated API path for Vercel
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch complaints');
@@ -49,7 +49,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     const messageId = document.getElementById('messageId').value;
     const response = document.getElementById('response').value;
 
-    fetch('/respond-message', { // Change to /api/respond-message to match your Vercel API
+    fetch('/api/respond-message', { // Updated API path for Vercel
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
 
 // Redirect to the complaint page
 function redirectToComplaintPage() {
-    fetch('/check-auth', { // Change to /api/check-auth to match your Vercel API
+    fetch('/check-auth', { // Updated API path for Vercel
         method: 'GET',
         credentials: 'include'
     })
@@ -102,7 +102,7 @@ function redirectToComplaintPage() {
 document.getElementById('main-page-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default anchor click behavior
 
-    fetch('/check-auth', { // Change to /api/check-auth to match your Vercel API
+    fetch('/check-auth', { // Updated API path for Vercel
         method: 'GET'
     })
     .then(response => {

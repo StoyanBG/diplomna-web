@@ -11,10 +11,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^11.4.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "firebase-admin": "^12.6.0",
-    "sqlite3": "^5.1.7"
+    "jsonwebtoken": "^9.0.2"
   }
 }
