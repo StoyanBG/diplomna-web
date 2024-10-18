@@ -2,7 +2,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     event.preventDefault(); // Prevent default form submission
     const formData = new FormData(this);
 
-    fetch('/login', { // Updated to /api/login for your Vercel deployment
+    fetch(']/login', { // Updated to /api/login for your Vercel deployment
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,8 +29,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         // Store the token in localStorage for persistence across browser sessions
         localStorage.setItem('token', data.token);
 
-        // Redirect to the desired page after successful login
-        window.location.href = '../fl.html'; 
+        // Redirect to fl.html with the token as a query parameter
+        window.location.href = `../fl.html?token=${data.token}`; 
     })
     .catch(error => {
         alert(error.message); // Display an error message to the user
