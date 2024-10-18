@@ -1,10 +1,9 @@
-const express = require('express');
+const express = require('express'); 
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const { createClient } = require('@supabase/supabase-js');
-const argon2 = require('argon2'); // Import argon2
 
 // Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -68,46 +67,37 @@ app.post('/register', async (req, res) => {
       .from('users')
       .select('*')
       .eq('email', email)
-      .single();
+      .single();  // Ensures only one row is returned
 
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash the password using argon2
-    const hashedPassword = await argon2.hash(password);
-
     // Insert the new user into the Supabase database
     const { data: newUser, error: insertError } = await supabase
       .from('users')
-      .insert([{ name, email, password: hashedPassword }])
+      .insert([{ name, email, password }])  // Hash password in production
       .select('*')
-      .single();
+      .single();  // Ensures only one row is returned
 
     if (insertError) {
       throw new Error(insertError.message);
     }
 
-    req.session.userId = newUser.id;
     res.json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-
 // Authentication middleware
 function authenticateUser(req, res, next) {
   if (!req.session.userId) {
-    return res.status(401).json({ error: 'Unauthorized - User not authenticated. Please log in.' });
+    return res.status(401).json({ error: 'Unauthorized - User not authenticated' });
   }
   next();
 }
 
-app.get('/check-auth', (req, res) => {
-  const isAuthenticated = !!req.session.userId; // True if userId exists in the session
-  res.json({ isAuthenticated });
-});
 // Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -119,18 +109,23 @@ app.post('/login', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the password matches
-    const isPasswordValid = await argon2.verify(user.password, password);
-    if (!isPasswordValid) {
+    // Check if the password matches (in production, compare hashed passwords)
+    if (user.password !== password) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
+    // Store userId in session
     req.session.userId = user.id;
-    const token = `token-${user.id}`;
-    res.json({ message: 'User logged in successfully', token });
+
+    res.json({ message: 'User logged in successfully', userId: user.id });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Route to check authentication status
+app.get('/check-auth', authenticateUser, (req, res) => {
+  res.json({ isAuthenticated: true, userId: req.session.userId });
 });
 
 // Route for saving user choices
