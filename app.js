@@ -112,18 +112,24 @@ app.post('/save-choice', authenticateUser, async (req, res) => { // Updated path
 });
 
 // Route for fetching selected lines
-app.get('/selected-lines', authenticateUser, async (req, res) => { // Updated path to /api/selected-lines
+// Route for fetching selected lines
+app.get('/selected-lines', authenticateUser, async (req, res) => {
   const userId = req.userId;
 
   try {
     const snapshot = await db.ref('choices/' + userId).once('value');
     const choices = snapshot.val() || {};
+
+    // Extracting line IDs from the choices
     const lineIds = Object.values(choices).map(choice => choice.lineId);
+
+    // Responding with the list of line IDs
     res.json(lineIds);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message }); // Handle errors
   }
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
