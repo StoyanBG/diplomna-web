@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route for user registration
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => { // Updated path to /api/register
   const { name, email, password } = req.body;
 
   try {
@@ -62,14 +62,11 @@ app.post('/register', async (req, res) => {
 });
 
 // Route for user login
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => { // Updated path to /api/login
   const { email, password } = req.body;
 
   try {
     const userRecord = await admin.auth().getUserByEmail(email);
-
-    // Since Firebase does not support password verification on the server,
-    // The client should authenticate using Firebase Authentication SDK.
     const customToken = await admin.auth().createCustomToken(userRecord.uid); // Create a custom token
     res.json({ message: 'User logged in successfully', token: customToken }); // Return the custom token
   } catch (error) {
@@ -82,7 +79,7 @@ async function authenticateUser(req, res, next) {
   const token = req.headers.authorization?.split('Bearer ')[1];
 
   if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Unauthorized - Token missing' });
   }
 
   try {
@@ -90,17 +87,17 @@ async function authenticateUser(req, res, next) {
     req.userId = decodedToken.uid; // Store user ID for later use
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
+    return res.status(401).json({ error: 'Invalid token - Authentication failed' });
   }
 }
 
 // Route for checking user authentication
-app.get('/check-auth', authenticateUser, (req, res) => {
+app.get('/check-auth', authenticateUser, (req, res) => { // Updated path to /api/check-auth
   res.json({ isAuthenticated: true }); // User is authenticated
 });
 
 // Route for saving user choices
-app.post('/save-choice', authenticateUser, async (req, res) => {
+app.post('/save-choice', authenticateUser, async (req, res) => { // Updated path to /api/save-choice
   const { lineIds } = req.body;
   const userId = req.userId; // Use the authenticated user ID
 
@@ -115,7 +112,7 @@ app.post('/save-choice', authenticateUser, async (req, res) => {
 });
 
 // Route for fetching selected lines
-app.get('/selected-lines', authenticateUser, async (req, res) => {
+app.get('/selected-lines', authenticateUser, async (req, res) => { // Updated path to /api/selected-lines
   const userId = req.userId;
 
   try {

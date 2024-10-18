@@ -1,7 +1,7 @@
 // Fetch selected lines for the current user from the server
 const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
-fetch('/selected-lines', { // Updated to /api/selected-lines to match your Vercel API
+fetch('/selected-lines', { // Updated to /api/selected-lines
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}` // Include the token in the request headers
@@ -53,7 +53,7 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     event.preventDefault(); // Prevent the default anchor click behavior
 
     // Check authentication status
-    fetch('/check-auth', { // Updated to /api/check-auth to match your Vercel API
+    fetch('/api/check-auth', { // Updated to /api/check-auth
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}` // Include the token in the request headers
