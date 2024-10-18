@@ -1,7 +1,14 @@
-// Fetch selected lines for the current user from the server
-const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+// Get the URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token') || localStorage.getItem('token'); // Retrieve the token from the URL or localStorage
 
-fetch('/selected-lines', { // Updated to include /api prefix
+if (token) {
+    // Store the token in localStorage for future requests (if it was from the URL)
+    localStorage.setItem('token', token);
+}
+
+// Fetch selected lines for the current user from the server
+fetch('/selected-lines', {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}` // Include the token in the request headers
@@ -53,7 +60,7 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     event.preventDefault(); // Prevent the default anchor click behavior
 
     // Check authentication status
-    fetch('/api/check-auth', { // Updated to include /api prefix
+    fetch('/check-auth', { // Updated to include /api prefix
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}` // Include the token in the request headers
