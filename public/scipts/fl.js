@@ -1,10 +1,10 @@
 // Get the URL parameters
 const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token') || localStorage.getItem('token'); // Retrieve the token from the URL or localStorage
+const token = urlParams.get('token') || sessionStorage.getItem('token'); // Retrieve from sessionStorage
 
 if (token) {
-    // Store the token in localStorage for future requests (if it was from the URL)
-    localStorage.setItem('token', token);
+    // Store the token in sessionStorage for future requests (if it was from the URL)
+    sessionStorage.setItem('token', token);
 }
 
 // Function to fetch selected lines for the current user
@@ -55,7 +55,8 @@ function fetchSelectedLines() {
         }
     })
     .catch(error => {
-        console.error('Error fetching selected lines:', error); // Log any errors
+        console.error('Error fetching selected lines:', error);
+        alert('Could not load selected lines. Please try again later.'); // User-friendly message
     });
 }
 
@@ -90,7 +91,7 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     })
     .catch(error => {
         console.error('Error checking authentication:', error);
-        // Handle error, maybe redirect to login or show a message
+        alert('Authentication check failed. Redirecting to login.'); // User-friendly message
         window.location.href = '../login.html'; // Redirect to login page on error
     });
 });
