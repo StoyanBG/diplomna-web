@@ -2,12 +2,8 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const Database = require('better-sqlite3');
-const bcrypt = require('bcryptjs'); // Change here: Use bcryptjs instead of bcrypt
-const jwt = require('jsonwebtoken');
-
-// Initialize Turso (SQLite) database
-const db = new Database(process.env.TURSO_DB_URL, { verbose: console.log }); // Use Turso Cloud URL
+const fs = require('fs');
+const session = require('express-session');
 
 const app = express();
 
@@ -24,98 +20,120 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helper function to generate JWT tokens
-function generateToken(userId) {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// Session management middleware
+app.use(session({
+  secret: 'yourSecretKey', // Change this to a secure random key
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false, // Set to true if using HTTPS
+    maxAge: 1000 * 60 * 60 // 1 hour session expiration
+  }
+}));
+
+// Helper function to read JSON file
+function readJsonFileSync(filePath) {
+  const data = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(data);
 }
 
-// Helper function to verify JWT tokens
-function verifyToken(token) {
-  return jwt.verify(token, process.env.JWT_SECRET);
+// Helper function to write to JSON file
+function writeJsonFileSync(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
+
+// Paths for user data and choices
+const usersFilePath = path.join(__dirname, 'users.json');
+const choicesFilePath = path.join(__dirname, 'choices.json');
 
 // Route for user registration
-app.post('/register', async (req, res) => {
+app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    const users = readJsonFileSync(usersFilePath);
+
     // Check if the user already exists
-    const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    const existingUser = users.find(user => user.email === email);
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Insert the new user into the "database"
+    const newUser = {
+      id: users.length + 1, // Simple ID generation
+      name,
+      email,
+      password, // In production, hash the password
+      createdAt: new Date().toISOString(),
+    };
+    users.push(newUser);
+    writeJsonFileSync(usersFilePath, users);
 
-    // Insert the new user into the database
-    const stmt = db.prepare('INSERT INTO users (name, email, password, createdAt) VALUES (?, ?, ?, ?)');
-    const info = stmt.run(name, email, hashedPassword, new Date().toISOString());
-
-    res.json({ message: 'User registered successfully', userId: info.lastInsertRowid });
+    res.json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+function authenticateUser(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Unauthorized - User not authenticated' });
+  }
+  next();
+}
 
+// Route for checking user authentication
+app.get('/check-auth', authenticateUser, (req, res) => {
+  res.json({ isAuthenticated: true, userId: req.session.userId });
+});
 // Route for user login
-app.post('/login', async (req, res) => {
+app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Retrieve the user from the database
-    const user = db.prepare('SELECT id, password FROM users WHERE email = ?').get(email);
+    const users = readJsonFileSync(usersFilePath);
+    const user = users.find(user => user.email === email);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Compare passwords
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+    if (!user || user.password !== password) { // Simple password check, replace with hashed check
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
-    // Generate a JWT token
-    const token = generateToken(user.id);
+    // Store user ID in session
+    req.session.userId = user.id;
+    req.session.userName = user.name;
 
-    res.json({ message: 'User logged in successfully', token });
+    res.json({ message: 'User logged in successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Middleware to check if the user is authenticated
-async function authenticateUser(req, res, next) {
-  const token = req.headers.authorization?.split('Bearer ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized - Token missing' });
+function authenticateUser(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Unauthorized - User not authenticated' });
   }
-
-  try {
-    const decodedToken = verifyToken(token);
-    req.userId = decodedToken.userId; // Store user ID for later use
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Invalid token - Authentication failed' });
-  }
+  next();
 }
 
-// Route for checking user authentication
-app.get('/check-auth', authenticateUser, (req, res) => {
-  res.json({ isAuthenticated: true });
-});
-
 // Route for saving user choices
-app.post('/save-choice', authenticateUser, async (req, res) => {
+app.post('/save-choice', authenticateUser, (req, res) => {
   const { lineIds } = req.body;
-  const userId = req.userId;
+  const userId = req.session.userId;
 
   try {
-    const stmt = db.prepare('INSERT INTO choices (userId, lineId, createdAt) VALUES (?, ?, ?)');
-    const promises = lineIds.map(lineId => stmt.run(userId, lineId, new Date().toISOString()));
-    await Promise.all(promises);
+    const choices = readJsonFileSync(choicesFilePath);
+    const userChoices = choices[userId] || [];
+
+    // Save choices
+    lineIds.forEach(lineId => {
+      userChoices.push({
+        lineId,
+        createdAt: new Date().toISOString(),
+      });
+    });
+    choices[userId] = userChoices;
+    writeJsonFileSync(choicesFilePath, choices);
 
     res.sendStatus(200);
   } catch (error) {
@@ -124,18 +142,19 @@ app.post('/save-choice', authenticateUser, async (req, res) => {
 });
 
 // Route for fetching selected lines
-app.get('/selected-lines', authenticateUser, async (req, res) => {
-  const userId = req.userId;
+app.get('/selected-lines', authenticateUser, (req, res) => {
+  const userId = req.session.userId;
 
   try {
-    const stmt = db.prepare('SELECT lineId FROM choices WHERE userId = ?');
-    const choices = stmt.all(userId);
-
-    const lineIds = choices.map(choice => choice.lineId);
+    const choices = readJsonFileSync(choicesFilePath);
+    const userChoices = choices[userId] || [];
+    const lineIds = userChoices.map(choice => choice.lineId);
     res.json(lineIds);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-module.exports = app;
+app.listen(3000, () => {
+  console.log(`Server is running on http://localhost:${3000}`);
+});

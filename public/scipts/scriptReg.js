@@ -30,14 +30,13 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         return response.json(); // Parse JSON response
     })
     .then(data => {
-        // Optionally store the token after successful registration and auto-login
-        sessionStorage.setItem('token', data.token); // Store token in sessionStorage
-  
-        // Redirect to allLines.html after successful registration and login
+        // User registered successfully, now you may choose to auto-login
+        alert(data.message); // Optionally show success message
+        
+        // Redirect to allLines.html after successful registration
         window.location.href = '../allLines.html';
     })
     .catch(error => {
         alert(error.message); // Show error message to the user
     });
-  });
-  
+});

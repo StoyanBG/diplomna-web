@@ -29,7 +29,7 @@ function saveChoice() {
     }
   
     // Send a POST request to save the user's selected lines
-    fetch('/api/save-choice', { // Added /api/ prefix for Vercel API consistency
+    fetch('/save-choice', { // Added /api/ prefix for Vercel API consistency
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
