@@ -71,7 +71,7 @@ app.post('/register', async (req, res) => {
       .from('users')
       .select('*')
       .eq('email', email)
-      .single();  // Ensures only one row is returned
+      .single();
 
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
@@ -82,7 +82,7 @@ app.post('/register', async (req, res) => {
       .from('users')
       .insert([{ name, email, password }])  // Hash password in production
       .select('*')
-      .single();  // Ensures only one row is returned
+      .single();
 
     if (insertError) {
       throw new Error(insertError.message);
@@ -105,7 +105,6 @@ function authenticateUser(req, res, next) {
   next();
 }
 
-// Route for user login
 // Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -186,24 +185,23 @@ app.get('/selected-lines', authenticateUser, async (req, res) => {
   console.log('User ID from session:', userId); // Log the user ID
 
   if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
-      const { data: choices, error } = await supabase
-          .from('choices')
-          .select('line_id')
-          .eq('user_id', userId);
+    const { data: choices, error } = await supabase
+      .from('choices')
+      .select('line_id')
+      .eq('user_id', userId);
 
-      if (error) throw error;
+    if (error) throw error;
 
-      const lineIds = choices.map(choice => choice.line_id);
-      res.json(lineIds);
+    const lineIds = choices.map(choice => choice.line_id);
+    res.json(lineIds);
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
-
 
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:${3000}`);

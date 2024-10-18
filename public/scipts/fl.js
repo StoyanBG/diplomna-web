@@ -7,60 +7,67 @@ if (token) {
     localStorage.setItem('token', token);
 }
 
-// Fetch selected lines for the current user from the server
-fetch('/selected-lines', {
-    method: 'GET',
-    headers: {
-        'Authorization': `Bearer ${token}` // Include the token in the request headers
-    }
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Failed to fetch selected lines');
-    }
-    return response.json(); // Parse the response as JSON
-})
-.then(lineIds => {
-    // Ensure that lineIds is an array
-    if (Array.isArray(lineIds)) {
-        // Display selected lines as buttons
-        const lineButtonsContainer = document.getElementById('lineButtons');
-        lineButtonsContainer.innerHTML = ''; // Clear any existing buttons
-        lineIds.forEach(line => {
-            const buttonDiv = document.createElement('div');
-            buttonDiv.className = 'button-div';
+// Function to fetch selected lines for the current user
+function fetchSelectedLines() {
+    fetch('/selected-lines', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}` // Include the token in the request headers
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch selected lines');
+        }
+        return response.json(); // Parse the response as JSON
+    })
+    .then(lineIds => {
+        // Ensure that lineIds is an array
+        if (Array.isArray(lineIds)) {
+            // Display selected lines as buttons
+            const lineButtonsContainer = document.getElementById('lineButtons');
+            lineButtonsContainer.innerHTML = ''; // Clear any existing buttons
+            
+            lineIds.forEach(line => {
+                const buttonDiv = document.createElement('div');
+                buttonDiv.className = 'button-div';
 
-            const aTag = document.createElement('a');
-            aTag.style.color = 'red';
-            aTag.href = `lines/liniq${line}.html`; // Link to the line page
+                const aTag = document.createElement('a');
+                aTag.style.color = 'red';
+                aTag.href = `lines/liniq${line}.html`; // Link to the line page
 
-            const button = document.createElement('button');
-            button.className = 'btn btn-warning';
+                const button = document.createElement('button');
+                button.className = 'btn btn-warning';
 
-            const image = document.createElement('img');
-            image.src = `lines/img/${line}.jpg`; // Image source for the line
+                const image = document.createElement('img');
+                image.src = `lines/img/${line}.jpg`; // Image source for the line
 
-            const h5 = document.createElement('h5');
-            h5.textContent = `линия ${line}`; // Text for the button
+                const h5 = document.createElement('h5');
+                h5.textContent = `линия ${line}`; // Text for the button
 
-            button.appendChild(image);
-            button.appendChild(h5);
-            aTag.appendChild(button);
-            buttonDiv.appendChild(aTag);
-            lineButtonsContainer.appendChild(buttonDiv);
-        });
-    }
-})
-.catch(error => {
-    console.error('Error fetching selected lines:', error); // Log any errors
-});
+                // Append elements
+                button.appendChild(image);
+                button.appendChild(h5);
+                aTag.appendChild(button);
+                buttonDiv.appendChild(aTag);
+                lineButtonsContainer.appendChild(buttonDiv);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching selected lines:', error); // Log any errors
+    });
+}
+
+// Call the function to fetch selected lines
+fetchSelectedLines();
 
 // Check authentication status on main page button click
 document.getElementById('main-page-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default anchor click behavior
 
     // Check authentication status
-    fetch('/check-auth', { // Updated to include /api prefix
+    fetch('/check-auth', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}` // Include the token in the request headers
