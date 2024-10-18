@@ -1,9 +1,10 @@
-const express = require('express'); 
+const express = require('express');  
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const { createClient } = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken'); // Add JWT for token handling
 
 // Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -27,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session management middleware
 app.use(session({
-  secret: 'yourSecretKey',
+  secret: process.env.SESSION_SECRET || 'yourSecretKey', // Use environment variable for secret
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -35,6 +36,9 @@ app.use(session({
     maxAge: 1000 * 60 * 60 // 1-hour session expiration
   }
 }));
+
+// JWT secret from environment variable
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper function for interacting with Supabase
 async function getUserByEmail(email) {
@@ -84,7 +88,10 @@ app.post('/register', async (req, res) => {
       throw new Error(insertError.message);
     }
 
-    res.json({ message: 'User registered successfully' });
+    // Generate a JWT token
+    const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ message: 'User registered successfully', token }); // Return the token
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -114,14 +121,27 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
-    // Store userId in session
-    req.session.userId = user.id;
-
-    res.json({ message: 'User logged in successfully', userId: user.id });
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ message: 'User logged in successfully', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Middleware to verify JWT token
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
+
+  if (!token) return res.sendStatus(401); // No token provided
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user; // Attach user info to the request object
+    next();
+  });
+}
 
 // Route to check authentication status
 app.get('/check-auth', authenticateUser, (req, res) => {
