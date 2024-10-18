@@ -1,5 +1,5 @@
 // Fetch selected lines for the current user from the server
-const token = sessionStorage.getItem('token'); // Retrieve the token from session storage
+const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
 fetch('/selected-lines', { // Updated to /api/selected-lines to match your Vercel API
     method: 'GET',
@@ -77,6 +77,6 @@ document.getElementById('main-page-button').addEventListener('click', function(e
     .catch(error => {
         console.error('Error checking authentication:', error);
         // Handle error, maybe redirect to login or show a message
-        window.location.href = '../login.html';
+        window.location.href = '../login.html'; // Redirect to login page on error
     });
 });
