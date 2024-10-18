@@ -183,20 +183,27 @@ app.post('/save-choice', authenticateUser, async (req, res) => {
 app.get('/selected-lines', authenticateUser, async (req, res) => {
   const userId = req.session.userId;
 
+  console.log('User ID from session:', userId); // Log the user ID
+
+  if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   try {
-    const { data: choices, error } = await supabase
-      .from('choices')
-      .select('line_id')
-      .eq('user_id', userId);
+      const { data: choices, error } = await supabase
+          .from('choices')
+          .select('line_id')
+          .eq('user_id', userId);
 
-    if (error) throw error;
+      if (error) throw error;
 
-    const lineIds = choices.map(choice => choice.line_id);
-    res.json(lineIds);
+      const lineIds = choices.map(choice => choice.line_id);
+      res.json(lineIds);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
+
 
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:${3000}`);
