@@ -2,7 +2,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     event.preventDefault(); // Prevent default form submission
     const formData = new FormData(this);
 
-    fetch('/login', { // Update to /api/login to match your Vercel API
+    fetch('/login', { // Update to /api/login if necessary for your Vercel deployment
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -15,25 +15,24 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     .then(response => {
         if (!response.ok) {
             if (response.status === 404) {
-                // Redirect to registration.html if the endpoint is not found
+                // Redirect to registration.html if user is not found
                 window.location.href = '../registration.html';
                 return;
             }
             return response.json().then(data => {
-                throw new Error(data.error); // Throw an error if response is not ok
+                throw new Error(data.error); // Throw an error if the login failed
             });
         }
-        // If login is successful, store the token and redirect
-        return response.json(); // Parse the response as JSON
+        return response.json(); // Parse the JSON response
     })
     .then(data => {
-        // Store the token in session storage
-        sessionStorage.setItem('token', data.token); // Store the token received from server
+        // Store the token in localStorage for persistence across browser sessions
+        localStorage.setItem('token', data.token);
 
-        // Redirect to fl.html
+        // Redirect to the desired page after successful login
         window.location.href = '../fl.html'; 
     })
     .catch(error => {
-        alert(error.message); // Show error message to the user
+        alert(error.message); // Display an error message to the user
     });
 });

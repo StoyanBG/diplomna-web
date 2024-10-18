@@ -1,7 +1,8 @@
-const express = require('express'); 
+const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
+const cors = require('cors'); // Import CORS
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
@@ -23,6 +24,12 @@ admin.initializeApp({
 const db = admin.database(); // Initialize Firebase Realtime Database
 
 const app = express();
+
+// CORS middleware
+app.use(cors({
+  origin: '*', // Allow all origins for now (you can restrict it to specific domains)
+  credentials: true // Enable if you want to allow cookies or authorization headers
+}));
 
 // Middleware for parsing JSON body
 app.use(express.json());
@@ -60,7 +67,7 @@ app.post('/login', async (req, res) => {
 
   try {
     const userRecord = await admin.auth().getUserByEmail(email);
-    
+
     // Since Firebase does not support password verification on the server,
     // The client should authenticate using Firebase Authentication SDK.
     const customToken = await admin.auth().createCustomToken(userRecord.uid); // Create a custom token
