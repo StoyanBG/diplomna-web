@@ -1,8 +1,10 @@
 document.getElementById('loginForm').addEventListener('submit', function(event) { 
     event.preventDefault(); // Prevent default form submission
+
     const formData = new FormData(this);
 
-    fetch('/login', { // Updated to /api/login for your Vercel deployment
+    // Fetch login endpoint
+    fetch('/login', { // Ensure the endpoint is correct for your setup
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

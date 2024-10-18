@@ -3,14 +3,15 @@ document.getElementById('registrationForm').addEventListener('submit', function(
     const formData = new FormData(this);
     const password = formData.get('password');
     const confirmPassword = formData.get('confirmPassword');
-  
+
     // Check if passwords match
     if (password !== confirmPassword) {
         alert('Паролите не съвпадат'); // Show alert if passwords do not match
         return;
     }
-  
-    fetch('/register', { // Updated to /api/register for Vercel deployment
+
+    // Prepare the registration request
+    fetch('/register', { // Ensure the endpoint is correct for your setup
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -30,7 +31,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         return response.json(); // Parse JSON response
     })
     .then(data => {
-        // User registered successfully, now you may choose to auto-login
+        // User registered successfully
         alert(data.message); // Optionally show success message
         
         // Redirect to allLines.html after successful registration

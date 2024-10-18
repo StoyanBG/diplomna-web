@@ -106,6 +106,7 @@ function authenticateUser(req, res, next) {
 }
 
 // Route for user login
+// Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -121,8 +122,12 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
+    // Store user ID in session
+    req.session.userId = user.id;
+
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    
     res.json({ message: 'User logged in successfully', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -144,8 +149,12 @@ function authenticateToken(req, res, next) {
 }
 
 // Route to check authentication status
-app.get('/check-auth', authenticateUser, (req, res) => {
-  res.json({ isAuthenticated: true, userId: req.session.userId });
+app.get('/check-auth', (req, res) => {
+  if (req.session.userId) {
+    res.json({ isAuthenticated: true, userId: req.session.userId });
+  } else {
+    res.json({ isAuthenticated: false });
+  }
 });
 
 // Route for saving user choices
