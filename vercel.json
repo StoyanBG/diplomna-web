@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/register",
+      "dest": "/api/register"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.js"
     }
