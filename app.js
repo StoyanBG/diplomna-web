@@ -87,34 +87,31 @@ app.get('/check-auth', authenticateUser, (req, res) => {
   res.json({ isAuthenticated: true, userId: req.session.userId });
 });
 // Route for user login
+// Route for user login
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const users = readJsonFileSync(usersFilePath);
-    const user = users.find(user => user.email === email);
+      const users = readJsonFileSync(usersFilePath);
+      const user = users.find(user => user.email === email);
 
-    if (!user || user.password !== password) { // Simple password check, replace with hashed check
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
 
-    // Store user ID in session
-    req.session.userId = user.id;
-    req.session.userName = user.name;
+      // Check if the password matches
+      if (user.password !== password) { // For production, you should hash passwords and compare hashes
+          return res.status(400).json({ error: 'Invalid credentials' });
+      }
 
-    res.json({ message: 'User logged in successfully' });
+      // Generate a simple token (replace with JWT in production)
+      const token = `token-${user.id}`;
+      res.json({ message: 'User logged in successfully', token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
 
-// Middleware to check if the user is authenticated
-function authenticateUser(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Unauthorized - User not authenticated' });
-  }
-  next();
-}
 
 // Route for saving user choices
 app.post('/save-choice', authenticateUser, (req, res) => {
