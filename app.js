@@ -149,7 +149,8 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
 });
 
 // Route for getting complaints
-app.get('/get-complaints', authenticateToken, async (req, res) => {
+// Route for getting complaints
+app.get('/get-complaints', async (req, res) => {
   try {
     const { data: complaints, error } = await supabase
       .from('messages')
@@ -158,11 +159,24 @@ app.get('/get-complaints', authenticateToken, async (req, res) => {
 
     if (error) throw error;
 
-    res.json(complaints);
+    // Fetch responses for each complaint
+    const complaintsWithResponses = await Promise.all(complaints.map(async (complaint) => {
+      const { data: responses, error: responseError } = await supabase
+        .from('responses')
+        .select('*')
+        .eq('message_id', complaint.id);
+        
+      if (responseError) throw responseError;
+
+      return { ...complaint, responses };
+    }));
+
+    res.json(complaintsWithResponses);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => {

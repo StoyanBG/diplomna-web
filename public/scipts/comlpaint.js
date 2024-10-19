@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', fetchComplaints);
 
 function fetchComplaints() {
-    fetch('/get-complaints') // API path for fetching complaints
+    fetch('/get-complaints', { method: 'GET' }) // API path for fetching complaints
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch complaints');
@@ -15,9 +15,9 @@ function fetchComplaints() {
             complaintsList.innerHTML = ''; // Clear existing content
             
             complaints.forEach(complaint => {
-                const responsesHtml = complaint.responses && Object.keys(complaint.responses).length > 0
-                    ? Object.values(complaint.responses).map(res => 
-                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responderName})</p>`).join('')
+                const responsesHtml = complaint.responses && complaint.responses.length > 0
+                    ? complaint.responses.map(res => 
+                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responder})</p>`).join('')
                     : '<p><strong>Отговор:</strong> Все още няма отговор</p>'; // Message if no responses
 
                 const li = document.createElement('li');
