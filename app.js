@@ -169,12 +169,14 @@ app.get('/get-complaints', async (req, res) => {
 
       // Attach responder names to responses
       const responsesWithNames = await Promise.all(responses.map(async (res) => {
-        const user = await supabase
+        const { data: user, error: userError } = await supabase
           .from('users')
           .select('name')
           .eq('id', res.responder)
           .single();
-        return { ...res, responderName: user.data.name }; // Add responder name to response
+        
+        if (userError) throw userError;
+        return { ...res, responder_name: user.name }; // Add responder name to response
       }));
 
       return { ...complaint, responses: responsesWithNames };
@@ -214,11 +216,23 @@ app.post('/respond-message', authenticateToken, async (req, res) => {
   const responder = req.user.userId;
 
   try {
+    // Fetch the responder's name
+    const { data: responderData, error: fetchError } = await supabase
+      .from('users')
+      .select('name')
+      .eq('id', responder)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    const responderName = responderData.name;
+
     const { error } = await supabase
       .from('responses')
       .insert({
         message_id: messageId,
         responder: responder,
+        responder_name: responderName, // Store the responder's name
         response_message: response,
         created_at: new Date().toISOString(),
       });
