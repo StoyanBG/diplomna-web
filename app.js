@@ -149,13 +149,14 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
 });
 
 // Route for getting complaints
+// Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
     // Fetch complaints where the receiver is 'admin'
     const { data: complaints, error } = await supabase
       .from('messages')
       .select('*')
-      .eq('receiver', 'admin'); // Change as per your logic
+      .eq('receiver', 'admin'); // Ensure this logic fits your requirements
 
     if (error) throw error;
 
@@ -195,6 +196,7 @@ app.get('/get-complaints', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 
 // Route for sending a message

@@ -1,8 +1,7 @@
-// Fetch and display complaints with responses on page load
 document.addEventListener('DOMContentLoaded', fetchComplaints);
 
 function fetchComplaints() {
-    fetch('/get-complaints', { method: 'GET' }) // API path for fetching complaints
+    fetch('/get-complaints', { method: 'GET' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch complaints');
@@ -10,7 +9,7 @@ function fetchComplaints() {
             return response.json();
         })
         .then(complaints => {
-            console.log('Fetched complaints:', complaints); // Log complaints for debugging
+            console.log('Fetched complaints:', complaints);
             const complaintsList = document.getElementById('complaintsList');
             complaintsList.innerHTML = ''; // Clear existing content
             
@@ -18,13 +17,13 @@ function fetchComplaints() {
                 // Generate HTML for responses
                 const responsesHtml = complaint.responses && complaint.responses.length > 0
                     ? complaint.responses.map(res => 
-                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responder_name})</p>`).join('') // Use responder_name
-                    : '<p><strong>Отговор:</strong> Все още няма отговор</p>'; // Message if no responses
+                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responder_name})</p>`).join('')
+                    : '<p><strong>Отговор:</strong> Все още няма отговор</p>';
 
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <div class="complaint-item">
-                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender_name})</p> <!-- Change sender to sender_name -->
+                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender})</p> <!-- Ensure 'sender' matches the property -->
                         <div class="responses">
                             ${responsesHtml}
                         </div>
@@ -50,11 +49,11 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     const messageId = document.getElementById('messageId').value;
     const response = document.getElementById('response').value;
 
-    fetch('/respond-message', { // API path for responding to messages
+    fetch('/respond-message', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionStorage.getItem('token')}` // Include token for auth
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
         },
         body: JSON.stringify({ messageId, response })
     })
@@ -65,22 +64,22 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
         return response.text();
     })
     .then(data => {
-        document.getElementById('responseStatus').textContent = data; // Show success message
-        document.getElementById('responseForm').reset(); // Reset form fields
-        document.getElementById('responseForm').style.display = 'none'; // Hide form after submission
+        document.getElementById('responseStatus').textContent = data;
+        document.getElementById('responseForm').reset();
+        document.getElementById('responseForm').style.display = 'none';
         fetchComplaints(); // Reload complaints after response
     })
     .catch(error => {
-        document.getElementById('responseStatus').textContent = 'Error: ' + error.message; // Show error message
+        document.getElementById('responseStatus').textContent = 'Error: ' + error.message;
     });
 });
 
 // Redirect to the complaint page based on token presence
 function redirectToComplaintPage() {
-    const token = sessionStorage.getItem('token'); // Get token from sessionStorage
+    const token = sessionStorage.getItem('token');
     if (token) {
-        window.location.href = '../service.html'; // Redirect to service page if authenticated
+        window.location.href = '../service.html';
     } else {
-        window.location.href = '../login.html'; // Redirect to login if not authenticated
+        window.location.href = '../login.html';
     }
 }
