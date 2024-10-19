@@ -2,7 +2,6 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
     e.preventDefault(); // Prevent default form submission
     const subject = document.getElementById('subject').value; // Get the subject value
     const message = document.getElementById('message').value; // Get the message value
-    const responderName = document.getElementById('responderName').value; // Get the responder's name
 
     const token = sessionStorage.getItem('token'); // Retrieve the JWT token from sessionStorage
 
@@ -12,6 +11,10 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
         window.location.href = '../login.html'; // Redirect to login page if token does not exist
         return; // Exit the function
     }
+
+    // Decode the token to get the user's information
+    const userPayload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+    const responderName = userPayload.name; // Extract the responder's name from the token payload
 
     fetch('/send-message', { // Endpoint for sending the message
         method: 'POST',

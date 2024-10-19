@@ -18,7 +18,7 @@ function fetchComplaints() {
                 // Generate HTML for responses
                 const responsesHtml = complaint.responses && complaint.responses.length > 0
                     ? complaint.responses.map(res => 
-                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responderName})</p>`).join('') // Use responderName
+                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responder_name})</p>`).join('') // Use responder_name
                     : '<p><strong>Отговор:</strong> Все още няма отговор</p>'; // Message if no responses
 
                 const li = document.createElement('li');
