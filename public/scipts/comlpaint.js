@@ -24,7 +24,7 @@ function fetchComplaints() {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <div class="complaint-item">
-                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender})</p>
+                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender_name})</p> <!-- Change sender to sender_name -->
                         <div class="responses">
                             ${responsesHtml}
                         </div>

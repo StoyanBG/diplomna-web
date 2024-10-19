@@ -151,6 +151,7 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
 // Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
+    // Fetch complaints where the receiver is 'admin'
     const { data: complaints, error } = await supabase
       .from('messages')
       .select('*')
@@ -172,32 +173,54 @@ app.get('/get-complaints', async (req, res) => {
         const { data: user, error: userError } = await supabase
           .from('users')
           .select('name')
-          .eq('id', res.responder)
+          .eq('id', res.responder) // Assuming 'responder' stores the user ID
           .single();
         
         if (userError) throw userError;
         return { ...res, responder_name: user.name }; // Add responder name to response
       }));
 
-      return { ...complaint, responses: responsesWithNames };
+      return { ...complaint, responses: responsesWithNames }; // Combine complaint with its responses
     }));
 
-    res.json(complaintsWithResponses);
+    // Combine complaint data with sender's name
+    const complaintsWithSenderName = await Promise.all(complaintsWithResponses.map(async (complaint) => {
+      // Get the sender's name from the messages table
+      const senderName = complaint.sender; // sender already contains the name based on your earlier update
+      return { ...complaint, sender: senderName }; // Return complaint with sender name
+    }));
+
+    res.json(complaintsWithSenderName);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
+
 // Route for sending a message
-app.post('/send-message', authenticateToken, async (req, res) => {
+app.post('/send-message', authenticateToken, async (req, res) => { 
   const { subject, message } = req.body;
-  const sender = req.user.userId;
+  const senderId = req.user.userId; // Get user ID from authenticated token
 
   try {
+    // Fetch the sender's name from the users table based on senderId
+    const { data: senderData, error: senderError } = await supabase
+      .from('users') // Assuming your users are stored in a table called 'users'
+      .select('name') // Replace 'name' with the actual column name for the sender's name
+      .eq('id', senderId) // Match with the logged-in user's ID
+      .single(); // Fetch a single record
+
+    if (senderError || !senderData) {
+      return res.status(404).send('Sender not found'); // Handle case where user not found
+    }
+
+    const senderName = senderData.name; // Extract the sender's name
+
+    // Insert the message with sender's name
     await supabase
       .from('messages')
       .insert({
-        sender: sender,
+        sender: senderName, // Save sender's name instead of ID
         receiver: 'admin',
         subject,
         message,
@@ -206,9 +229,11 @@ app.post('/send-message', authenticateToken, async (req, res) => {
 
     res.status(200).send('Message sent successfully');
   } catch (error) {
+    console.error('Error sending message:', error); // Log error for debugging
     res.status(500).send('Server error');
   }
 });
+
 
 // Route for responding to a message
 app.post('/respond-message', authenticateToken, async (req, res) => {
