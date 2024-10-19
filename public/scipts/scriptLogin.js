@@ -39,15 +39,3 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     });
 });
 
-// Function to check authentication on page load
-function checkAuthentication() {
-    const token = sessionStorage.getItem('token');
-
-    if (!token) {
-        // If no token is found, redirect to login
-        window.location.href = '../login.html'; // Adjust this based on your app structure
-    }
-}
-
-// Call checkAuthentication on page load
-checkAuthentication();
