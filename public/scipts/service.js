@@ -12,7 +12,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
         return; // Exit the function
     }
 
-    fetch('/send-message', { // Updated to /api/send-message for Vercel API
+    fetch('/send-message', { // Endpoint for sending the message
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

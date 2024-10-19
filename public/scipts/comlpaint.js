@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', fetchComplaints);
 
 function fetchComplaints() {
-    fetch('/get-complaints') // Updated API path for Vercel
+    fetch('/get-complaints') // API path for fetching complaints
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch complaints');
@@ -49,7 +49,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     const messageId = document.getElementById('messageId').value;
     const response = document.getElementById('response').value;
 
-    fetch('/respond-message', { // Updated API path for Vercel
+    fetch('/respond-message', { // API path for responding to messages
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -64,13 +64,13 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
         return response.text();
     })
     .then(data => {
-        document.getElementById('responseStatus').textContent = data;
-        document.getElementById('responseForm').reset();
+        document.getElementById('responseStatus').textContent = data; // Show success message
+        document.getElementById('responseForm').reset(); // Reset form fields
         document.getElementById('responseForm').style.display = 'none'; // Hide form after submission
         fetchComplaints(); // Reload complaints after response
     })
     .catch(error => {
-        document.getElementById('responseStatus').textContent = 'Error: ' + error.message;
+        document.getElementById('responseStatus').textContent = 'Error: ' + error.message; // Show error message
     });
 });
 
@@ -83,6 +83,3 @@ function redirectToComplaintPage() {
         window.location.href = '../login.html'; // Redirect to login if not authenticated
     }
 }
-
-// This listener has been removed since it checks authentication
-// document.getElementById('main-page-button').addEventListener('click', function(event) { ... });

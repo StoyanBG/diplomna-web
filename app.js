@@ -148,6 +148,68 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
   }
 });
 
+// Route for getting complaints
+app.get('/get-complaints', authenticateToken, async (req, res) => {
+  try {
+    const { data: complaints, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('receiver', 'admin'); // Change as per your logic
+
+    if (error) throw error;
+
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route for sending a message
+app.post('/send-message', authenticateToken, async (req, res) => {
+  const { subject, message } = req.body;
+  const sender = req.user.userId;
+
+  try {
+    await supabase
+      .from('messages')
+      .insert({
+        sender: sender,
+        receiver: 'admin',
+        subject,
+        message,
+        created_at: new Date().toISOString(),
+      });
+
+    res.status(200).send('Message sent successfully');
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
+
+// Route for responding to a message
+app.post('/respond-message', authenticateToken, async (req, res) => {
+  const { messageId, response } = req.body;
+  const responder = req.user.userId;
+
+  try {
+    const { error } = await supabase
+      .from('responses')
+      .insert({
+        message_id: messageId,
+        responder: responder,
+        response_message: response,
+        created_at: new Date().toISOString(),
+      });
+
+    if (error) throw error;
+
+    res.status(200).send('Response sent successfully');
+  } catch (error) {
+    console.error('Error responding to message:', error);
+    res.status(500).send('Server error');
+  }
+});
+
 // Start the server
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:3000`);
