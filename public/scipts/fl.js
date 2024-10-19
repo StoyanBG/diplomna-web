@@ -1,10 +1,9 @@
-// Get the URL parameters
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token') || sessionStorage.getItem('token'); // Retrieve from sessionStorage
+// Retrieve the token from sessionStorage
+const token = sessionStorage.getItem('token');
 
-if (token) {
-    // Store the token in sessionStorage for future requests (if it was from the URL)
-    sessionStorage.setItem('token', token);
+if (!token) {
+    // If no token is found, redirect to login
+    window.location.href = '../login.html'; // Adjust this based on your app structure
 }
 
 // Function to fetch selected lines for the current user
@@ -67,31 +66,10 @@ fetchSelectedLines();
 document.getElementById('main-page-button').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default anchor click behavior
 
-    // Check authentication status
-    fetch('/check-auth', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}` // Include the token in the request headers
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to check authentication');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.isAuthenticated) {
-            // Redirect to cl.html if authenticated
-            window.location.href = '../cl.html';
-        } else {
-            // Redirect to login.html if not authenticated
-            window.location.href = '../login.html';
-        }
-    })
-    .catch(error => {
-        console.error('Error checking authentication:', error);
-        alert('Authentication check failed. Redirecting to login.'); // User-friendly message
-        window.location.href = '../login.html'; // Redirect to login page on error
-    });
+    // Redirect to cl.html directly if the token exists
+    if (token) {
+        window.location.href = '../cl.html'; // User is already authenticated
+    } else {
+        window.location.href = '../login.html'; // Redirect to login page if not authenticated
+    }
 });

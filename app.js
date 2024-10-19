@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
 
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Check if the password matches (using plain text for this example)
+    // Check if the password matches
     if (user.password !== password) return res.status(400).json({ error: 'Invalid credentials' });
 
     // Generate a JWT token
@@ -148,6 +148,7 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
   }
 });
 
+// Start the server
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:3000`);
 });

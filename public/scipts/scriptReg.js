@@ -34,6 +34,9 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         // User registered successfully
         alert(data.message); // Optionally show success message
         
+        // Store the received token in sessionStorage for authentication
+        sessionStorage.setItem('token', data.token); // Assuming the token is returned from the server
+
         // Redirect to allLines.html after successful registration
         window.location.href = '../allLines.html';
     })

@@ -17,31 +17,10 @@ function sendFeedback() {
     // Open the Gmail URL in a new tab
     window.open(gmailUrl, '_blank');
 }
+const token = sessionStorage.getItem('token');
 
-// Check authentication status on main page button click
-document.getElementById('main-page-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default anchor click behavior
-
-    // Check authentication status
-    fetch('/check-auth') // Change to /api/check-auth to match your Vercel API
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to check authentication');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.isAuthenticated) {
-                // Redirect to cl.html if authenticated
-                window.location.href = '../cl.html';
-            } else {
-                // Redirect to login.html if not authenticated
-                window.location.href = '../login.html';
-            }
-        })
-        .catch(error => {
-            console.error('Error checking authentication:', error);
-            // Handle error, maybe redirect to login or show a message
-            window.location.href = '../login.html';
-        });
-});
+    if (!token) {
+        // If token doesn't exist, redirect to login page
+        window.location.href = '../login.html';
+        return;
+}

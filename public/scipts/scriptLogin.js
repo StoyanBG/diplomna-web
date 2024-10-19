@@ -1,4 +1,4 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) { 
+document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
 
     const formData = new FormData(this);
@@ -28,13 +28,26 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return response.json(); // Parse the JSON response
     })
     .then(data => {
-        // Use sessionStorage for session-scoped storage instead of localStorage
+        // Store the JWT token in sessionStorage for session-scoped storage
         sessionStorage.setItem('token', data.token);
 
-        // Redirect to fl.html (Avoid passing token in query parameters for security reasons)
+        // Redirect to fl.html after successful login
         window.location.href = '../fl.html';
     })
     .catch(error => {
         alert(error.message); // Display an error message to the user
     });
 });
+
+// Function to check authentication on page load
+function checkAuthentication() {
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+        // If no token is found, redirect to login
+        window.location.href = '../login.html'; // Adjust this based on your app structure
+    }
+}
+
+// Call checkAuthentication on page load
+checkAuthentication();

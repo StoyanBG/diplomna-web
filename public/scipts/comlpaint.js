@@ -49,10 +49,11 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     const messageId = document.getElementById('messageId').value;
     const response = document.getElementById('response').value;
 
-    fetch('/api/respond-message', { // Updated API path for Vercel
+    fetch('/respond-message', { // Updated API path for Vercel
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}` // Include token for auth
         },
         body: JSON.stringify({ messageId, response })
     })
@@ -73,56 +74,15 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     });
 });
 
-// Redirect to the complaint page
+// Redirect to the complaint page based on token presence
 function redirectToComplaintPage() {
-    fetch('/check-auth', { // Updated API path for Vercel
-        method: 'GET',
-        credentials: 'include'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to check authentication');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.isAuthenticated) {
-            window.location.href = '../service.html';
-        } else {
-            window.location.href = '../login.html';
-        }
-    })
-    .catch(error => {
-        console.error('Error checking authentication:', error);
-        window.location.href = '../login.html'; // Redirect to login on error
-    });
+    const token = sessionStorage.getItem('token'); // Get token from sessionStorage
+    if (token) {
+        window.location.href = '../service.html'; // Redirect to service page if authenticated
+    } else {
+        window.location.href = '../login.html'; // Redirect to login if not authenticated
+    }
 }
 
-// Check authentication status on main page button click
-document.getElementById('main-page-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default anchor click behavior
-
-    fetch('/check-auth', { // Updated API path for Vercel
-        method: 'GET'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to check authentication');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.isAuthenticated) {
-            // Redirect to success.html if authenticated
-            window.location.href = '../allLines.html';
-        } else {
-            // Redirect to login.html if not authenticated
-            window.location.href = '../login.html';
-        }
-    })
-    .catch(error => {
-        console.error('Error checking authentication:', error);
-        // Handle error, maybe redirect to login or show a message
-        window.location.href = '../login.html';
-    });
-});
+// This listener has been removed since it checks authentication
+// document.getElementById('main-page-button').addEventListener('click', function(event) { ... });
