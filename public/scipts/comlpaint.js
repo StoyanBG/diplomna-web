@@ -15,9 +15,10 @@ function fetchComplaints() {
             complaintsList.innerHTML = ''; // Clear existing content
             
             complaints.forEach(complaint => {
+                // Generate HTML for responses
                 const responsesHtml = complaint.responses && complaint.responses.length > 0
                     ? complaint.responses.map(res => 
-                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responder})</p>`).join('')
+                        `<p><strong>Отговор:</strong> ${res.response_message} (от ${res.responderName})</p>`).join('') // Use responderName
                     : '<p><strong>Отговор:</strong> Все още няма отговор</p>'; // Message if no responses
 
                 const li = document.createElement('li');

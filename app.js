@@ -1,4 +1,4 @@
-const express = require('express');  
+const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -64,7 +64,7 @@ app.post('/register', async (req, res) => {
     if (insertError) throw new Error(insertError.message);
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser.id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ message: 'User registered successfully', token });
   } catch (error) {
@@ -85,7 +85,7 @@ app.post('/login', async (req, res) => {
     if (user.password !== password) return res.status(400).json({ error: 'Invalid credentials' });
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '1h' });
     
     res.json({ message: 'User logged in successfully', token });
   } catch (error) {
@@ -149,7 +149,6 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
 });
 
 // Route for getting complaints
-// Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
     const { data: complaints, error } = await supabase
@@ -168,7 +167,17 @@ app.get('/get-complaints', async (req, res) => {
         
       if (responseError) throw responseError;
 
-      return { ...complaint, responses };
+      // Attach responder names to responses
+      const responsesWithNames = await Promise.all(responses.map(async (res) => {
+        const user = await supabase
+          .from('users')
+          .select('name')
+          .eq('id', res.responder)
+          .single();
+        return { ...res, responderName: user.data.name }; // Add responder name to response
+      }));
+
+      return { ...complaint, responses: responsesWithNames };
     }));
 
     res.json(complaintsWithResponses);
@@ -176,7 +185,6 @@ app.get('/get-complaints', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => {

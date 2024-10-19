@@ -2,6 +2,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
     e.preventDefault(); // Prevent default form submission
     const subject = document.getElementById('subject').value; // Get the subject value
     const message = document.getElementById('message').value; // Get the message value
+    const responderName = document.getElementById('responderName').value; // Get the responder's name
 
     const token = sessionStorage.getItem('token'); // Retrieve the JWT token from sessionStorage
 
@@ -18,7 +19,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}` // Include the token for authorization
         },
-        body: JSON.stringify({ subject, message }) // Send subject and message as JSON
+        body: JSON.stringify({ subject, message, responderName }) // Send subject, message, and responder name as JSON
     })
     .then(response => {
         if (!response.ok) {
