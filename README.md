@@ -1,12 +1,8 @@
 # diplomna-web-app
-Before use you have to have node.js installed.
-Then you go and put all of the files in one folder then in the folder into poweshell by shift+right-click and choosing open powerhsell here and run:
- npm init
- npm install express
- npm install path
- npm install body-parser
- npm install express-session
- nom install firebase-admin
-Then you again open powershell the same way and write node .\app.js.
-Then you go in the browser and write localhost:3000.
-And you are done.
+Using Supabase  
+Account for supabase (github(stoqnkanev06@gmail.com))  
+Hosted with Vercel  
+Enviroment variables in Vercel  
+JWT_SECRET = yourSuperSecretKey  
+SUPABASE_API_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4cmFud2ZmdXd2em5rYnNscWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjkyNzYwMTksImV4cCI6MjA0NDg1MjAxOX0.oQVBPGUhtavRcn0vhSDZh8VZWx57LHR2t7MOjhHlQ0I  
+SUPABASE_URL = https://xxranwffuwvznkbslqdk.supabase.co  
