@@ -1,4 +1,4 @@
-# diplomna-web-app
+# diplomna-web
 Using Supabase  
 Account for supabase (github(stoqnkanev06@gmail.com))  
 Hosted with Vercel https://plovdiv-transport.vercel.app/  
