@@ -200,39 +200,38 @@ app.get('/get-complaints', async (req, res) => {
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => { 
   const { subject, message } = req.body;
-  const senderId = req.user.userId; // Get user ID from authenticated token
+  const senderName = req.user.name; // Get sender's name directly from authenticated token
+
+  // Check if the sender's name is available
+  if (!senderName) {
+    return res.status(400).send('Sender name not provided'); // Handle case where sender name is not available
+  }
 
   try {
-    // Fetch the sender's name from the users table based on senderId
-    const { data: senderData, error: senderError } = await supabase
-      .from('users') // Assuming your users are stored in a table called 'users'
-      .select('name') // Replace 'name' with the actual column name for the sender's name
-      .eq('id', senderId) // Match with the logged-in user's ID
-      .single(); // Fetch a single record
-
-    if (senderError || !senderData) {
-      return res.status(404).send('Sender not found'); // Handle case where user not found
-    }
-
-    const senderName = senderData.name; // Extract the sender's name
-
     // Insert the message with sender's name
-    await supabase
+    const { error: insertError } = await supabase
       .from('messages')
       .insert({
-        sender: senderName, // Save sender's name instead of ID
+        sender: senderName, // Save sender's name from token
         receiver: 'admin',
         subject,
         message,
         created_at: new Date().toISOString(),
       });
 
-    res.status(200).send('Message sent successfully');
+    if (insertError) {
+      console.error('Error inserting message:', insertError); // Log error for debugging
+      return res.status(500).send('Failed to send message'); // Handle insert error
+    }
+
+    res.status(200).send('Message sent successfully'); // Success response
   } catch (error) {
     console.error('Error sending message:', error); // Log error for debugging
-    res.status(500).send('Server error');
+    res.status(500).send('Server error'); // General server error
   }
 });
+
+
 
 
 // Route for responding to a message
