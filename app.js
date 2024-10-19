@@ -1,10 +1,8 @@
 const express = require('express');  
 const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const session = require('express-session');
 const { createClient } = require('@supabase/supabase-js');
-const jwt = require('jsonwebtoken'); // Add JWT for token handling
+const jwt = require('jsonwebtoken');
 
 // Initialize Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -21,21 +19,9 @@ app.use(cors({
 
 // Middleware for parsing JSON body
 app.use(express.json());
-app.use(bodyParser.json());
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Session management middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'yourSecretKey', // Use environment variable for secret
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: false, // Set to true if using HTTPS
-    maxAge: 1000 * 60 * 60 // 1-hour session expiration
-  }
-}));
 
 // JWT secret from environment variable
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -52,22 +38,13 @@ async function getUserByEmail(email) {
   return data;
 }
 
-async function addUser(user) {
-  const { data, error } = await supabase
-    .from('users')
-    .insert([user]);
-
-  if (error) throw error;
-  return data;
-}
-
 // Route for user registration
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
     // Check if the user already exists
-    const { data: existingUser, error } = await supabase
+    const { data: existingUser } = await supabase
       .from('users')
       .select('*')
       .eq('email', email)
@@ -84,9 +61,7 @@ app.post('/register', async (req, res) => {
       .select('*')
       .single();
 
-    if (insertError) {
-      throw new Error(insertError.message);
-    }
+    if (insertError) throw new Error(insertError.message);
 
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '1h' });
@@ -97,14 +72,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Authentication middleware
-function authenticateUser(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Unauthorized - User not authenticated' });
-  }
-  next();
-}
-
 // Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -112,17 +79,10 @@ app.post('/login', async (req, res) => {
   try {
     const user = await getUserByEmail(email);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     // Check if the password matches (using plain text for this example)
-    if (user.password !== password) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    // Store user ID in session
-    req.session.userId = user.id;
+    if (user.password !== password) return res.status(400).json({ error: 'Invalid credentials' });
 
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
@@ -147,22 +107,13 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// Route to check authentication status
-app.get('/check-auth', (req, res) => {
-  if (req.session.userId) {
-    res.json({ isAuthenticated: true, userId: req.session.userId });
-  } else {
-    res.json({ isAuthenticated: false });
-  }
-});
-
 // Route for saving user choices
-app.post('/save-choice', authenticateUser, async (req, res) => {
+app.post('/save-choice', authenticateToken, async (req, res) => {
   const { lineIds } = req.body;
   const userId = req.user.userId;
 
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('choices')
       .insert(lineIds.map(lineId => ({
         user_id: userId,
@@ -179,14 +130,8 @@ app.post('/save-choice', authenticateUser, async (req, res) => {
 });
 
 // Route for fetching selected lines
-app.get('/selected-lines', authenticateUser, async (req, res) => {
-  const userId = req.session.userId;
-
-  console.log('User ID from session:', userId); // Log the user ID
-
-  if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+app.get('/selected-lines', authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
 
   try {
     const { data: choices, error } = await supabase
@@ -204,5 +149,5 @@ app.get('/selected-lines', authenticateUser, async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log(`Server is running on http://localhost:${3000}`);
+  console.log(`Server is running on http://localhost:3000`);
 });
