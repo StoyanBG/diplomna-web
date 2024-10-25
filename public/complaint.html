@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/navFirst.css">
     <link rel="stylesheet" href="css/complaints.css">
+    
 </head>
 <body>
     <header>
@@ -24,30 +25,29 @@
         </nav>
     </header>
 
-    <main>
-        <section class="real-time-info">
-            <section class="complaints">
-                <h2>Подадени проблеми и отговори</h2>
-                <ul id="complaintsList" class="complaints-list">
-                    <!-- Complaints will be loaded here -->
-                </ul>
-            </section>
-            
-            <!-- Response form styled to match complaint item appearance -->
-            <form id="responseForm" style="display: none;">
-                <section class="response-form">
-                    <h2>Отговорете на проблем</h2>
-                    <label for="response">Отговор:</label>
-                    <textarea id="response" name="response" required></textarea>
-                    <input type="hidden" id="messageId" name="messageId" required>
-                    <button type="submit" class="btn btn-primary">Изпратете отговор</button>
-                </section>
-            </form>
-            
-            <div id="responseStatus"></div>
+<main>
+    <section class="real-time-info">
+        <section class="complaints">
+            <h2>Подадени проблеми и отговори</h2>
+            <ul id="complaintsList" class="complaints-list">
+                <!-- Complaints will be loaded here -->
+            </ul>
         </section>
-    </main>
-
+        
+        <!-- Move the response form inside real-time-info section -->
+        <form id="responseForm" style="display: none;">
+            <section class="response-form">
+                <h2>Отговорете на проблем</h2>
+                <label for="response">Отговор:</label>
+                <textarea id="response" name="response" required></textarea>
+                <input type="hidden" id="messageId" name="messageId" required>
+                <button type="submit" class="btn btn-primary">Изпратете отговор</button>
+            </section>
+        </form>
+        
+        <div id="responseStatus"></div>
+    </section>
+</main>
     <footer>
         <ul class="footer-links">
             <li><a href="/privacy.html">Политика за поверителност</a></li>
@@ -56,6 +56,6 @@
         <hr>
         <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
     </footer>
-    <script src="scripts/complaint.js"></script>
+    <script src="scipts/comlpaint.js"></script>
 </body>
 </html>
