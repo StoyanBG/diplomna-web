@@ -75,7 +75,7 @@ body {
 }
 
 .real-time-info {
-    background: linear-gradient(145deg, #f4f4f4, #e1e1e1); /* Matching gradient */
+    background-color: white; /* Matching gradient */
     border-radius: 15px;
     padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
