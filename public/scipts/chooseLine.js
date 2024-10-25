@@ -20,8 +20,13 @@ function saveChoice() {
     });
   
     // Retrieve the authentication token from sessionStorage
-    const token = sessionStorage.getItem('token'); // Ensure you are storing the token in sessionStorage
-  
+     // Ensure you are storing the token in sessionStorage
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+        // If no token is found, redirect to login
+        window.location.href = '../login.html'; // Adjust this based on your app structure
+    }
     // Check if the user has selected any lines
     if (chosenLines.length === 0) {
         alert('Please select at least one line.');

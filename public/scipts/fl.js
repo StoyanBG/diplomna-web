@@ -62,14 +62,3 @@ function fetchSelectedLines() {
 // Call the function to fetch selected lines
 fetchSelectedLines();
 
-// Check authentication status on main page button click
-document.getElementById('main-page-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default anchor click behavior
-
-    // Redirect to cl.html directly if the token exists
-    if (token) {
-        window.location.href = '../cl.html'; // User is already authenticated
-    } else {
-        window.location.href = '../login.html'; // Redirect to login page if not authenticated
-    }
-});
