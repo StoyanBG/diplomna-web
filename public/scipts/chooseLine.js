@@ -23,10 +23,7 @@ function saveChoice() {
      // Ensure you are storing the token in sessionStorage
     const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        alert('You must be logged in to choose a favourite line. Redirecting to login page.');
-        window.location.href = '../login.html'; // Adjust this based on your app structure
-    }
+    
     // Check if the user has selected any lines
     if (chosenLines.length === 0) {
         alert('Please select at least one line.');
@@ -46,8 +43,15 @@ function saveChoice() {
         if (response.ok) {
             // If successful, redirect to fl.html
             window.location.href = '../fl.html'; // Adjusted the path to work with Vercel
-        } else {
-            throw new Error('Failed to save choices');
+        }
+
+        else if ((!token)) {
+            alert('You must be logged in to choose a favourite line. Redirecting to login page.');
+            window.location.href = '../login.html'; // Adjust this based on your app structure
+        }
+         else {
+            window.location.href = '../login.html';
+            throw new Error('There was a mistake saving your choices');
         }
     })
     .catch(error => {
