@@ -20,7 +20,7 @@ function saveChoice() {
     });
   
     // Retrieve the authentication token from sessionStorage
-     // Ensure you are storing the token in sessionStorage
+
     const token = sessionStorage.getItem('token');
 
     
