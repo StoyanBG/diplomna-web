@@ -80,6 +80,7 @@ function redirectToComplaintPage() {
     if (token) {
         window.location.href = '../service.html';
     } else {
+        alert('You must be logged in to submit a complaint. Redirecting to login page.');
         window.location.href = '../login.html';
     }
 }

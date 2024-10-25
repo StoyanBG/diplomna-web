@@ -16,7 +16,7 @@ function fetchSelectedLines() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to fetch selected lines');
+            throw new Error('Please login');
         }
         return response.json(); // Parse the response as JSON
     })
