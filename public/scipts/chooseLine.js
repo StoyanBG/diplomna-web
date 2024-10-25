@@ -24,7 +24,7 @@ function saveChoice() {
     const token = sessionStorage.getItem('token');
 
     if (!token) {
-        // If no token is found, redirect to login
+        alert('You must be logged in to choose a favourite line. Redirecting to login page.');
         window.location.href = '../login.html'; // Adjust this based on your app structure
     }
     // Check if the user has selected any lines
