@@ -10,17 +10,23 @@ body {
     padding: 0;
 }
 
-.complaint-item,
-.response-form {
+.complaint-item {
     background: linear-gradient(145deg, #f4f4f4, #e1e1e1);
     border-radius: 15px;
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-    width: 90%; /* Match width */
-    max-width: 800px; /* Same max-width */
-    margin: 2rem auto; /* Center alignment */
+}
+
+.response-form {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    margin: 2rem auto;
 }
 
 .response-form label {
@@ -32,10 +38,6 @@ body {
     width: 100%;
     resize: vertical;
     margin-bottom: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
 }
 
 .response-form input,
@@ -52,7 +54,6 @@ body {
     color: #fff;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 .response-form button:hover {
@@ -66,14 +67,19 @@ body {
     color: #333;
 }
 
+#responseForm {
+    margin-top: 2rem;
+}
+
 .real-time-info {
-    background-color: #fff;
-    padding: 3rem 1.5rem;
-    text-align: center;
-    border-radius: 15px; /* Rounded to match complaint item */
+    background: linear-gradient(145deg, #f4f4f4, #e1e1e1); /* Matching gradient */
+    border-radius: 15px;
+    padding: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 90%;
     max-width: 800px;
+    margin: 2rem auto;
+    text-align: center;
 }
 
 .real-time-info h2 {
