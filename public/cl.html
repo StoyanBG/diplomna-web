@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="css/chooseLine.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/navbar.css">
+  <script>const token = sessionStorage.getItem('token');
+
+    if (!token) {
+        // If token doesn't exist, redirect to login page
+        window.location.href = '../login.html';
+        return;
+}</script>
 </head>
 <body>
   <nav>
@@ -67,6 +74,5 @@
     <p>&copy; 2024 Пловдив транспорт. Всички права са запазени.</p>
 </footer>
   <script src="scipts/chooseLine.js"> </script>
-  <script src="scipts/authcl.js"></script>
 </body>
 </html>
