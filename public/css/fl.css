@@ -8,8 +8,8 @@
     
 }
 @media screen and (max-width: 768px) {
-    .button-div{
-        max-width: 20%;
+    body{
+        max-width: 75%;
     }
 }
 
