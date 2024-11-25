@@ -4,8 +4,8 @@
     justify-content: center; 
 }
 .button-div {
-    margin: 1%; 
+    margin: 1%;
+    flex: 1 1 auto; /* Allow flexible resizing */
+    max-width: 150px; /* Optional max-width for buttons */
 }
-img{
-    size:75%;
-}
+
