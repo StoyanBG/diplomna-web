@@ -1,24 +1,40 @@
-header{
+/* Header Styles */
+header {
     background-color: #333;
     color: white;
-    padding: 1rem 1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1000; /* Ensure header stays above other elements */
 }
-a{
+
+a {
     text-decoration: none;
     color: white;
 }
+
+/* Navigation Links */
 .nav-links {
+    
     list-style: none;
     display: flex;
-    justify-content: flex-end;
-
+    justify-content: flex-end; /* Align links to the right */
+    margin: 0;
+    padding: 0;
 }
-.nav-links a{
 
+.nav-links li {
+    margin: 0 1rem;
+}
+
+.nav-links a {
     padding: 0.5rem 0.5rem;
     border: 2px solid transparent;
     border-radius: 5px;
 }
+
 .nav-links a:hover {
     background-color: #007bff;
     border-color: #007bff;
@@ -31,32 +47,80 @@ a{
     border-color: #0056b3;
 }
 
-.nav-links li {
-    margin: 0 1rem;
+/* Hamburger Button */
+.hamburger {
+    display: none; /* Hidden on larger screens */
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
+.hamburger:hover {
+    transform: scale(1.1);
 }
+
+/* Logo */
 .logo h1 {
     display: inline-block;
- 
-}
-.btn-primary {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%; /* Full width button */
+    font-size: 1.5rem;
+    margin-bottom: 3%;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    header {
+        justify-content: flex-start; /* Align hamburger and logo to the left */
+        gap: 1rem; /* Add space between the logo and hamburger */
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger button on mobile */
+        order: -1; /* Position hamburger to the left of the logo */
+    }
+
+    .nav-links {
+        display: none; /* Hide nav links by default */
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 100%;
+        left: 0; /* Align dropdown to the left */
+        width: 92%; /* Full width dropdown menu */
+        padding: 1rem;
+        box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 8px 8px;
+        
+    }
+
+    .nav-links.active {
+        display: flex; /* Show nav links when active */
+    }
+
+    .nav-links li {
+        margin: 5% 0; /* Add vertical spacing between buttons */
+    }
+
+    .nav-links a {
+        background-color: #444; /* Button-like background for mobile */
+        padding: 0.7rem 1rem;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        text-align: center;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background-color: #007bff;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+
+    .nav-links a.active {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
 }
