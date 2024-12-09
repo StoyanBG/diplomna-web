@@ -87,38 +87,50 @@ function authenticateToken(req, res, next) {
 }
 
 // Route for deleting a complaint
+// Route for deleting a complaint
 app.delete('/delete-complaint/:id', authenticateToken, async (req, res) => {
   const complaintId = req.params.id;
   const userId = req.user.userId;
 
   try {
-    // Check if the complaint belongs to the user
-    const { data, error } = await supabase
-      .from('complaints')
+    // Fetch the complaint details to verify ownership
+    const { data: complaint, error: fetchError } = await supabase
+      .from('messages')
       .select('sender')
       .eq('id', complaintId)
       .single();
 
-    if (error) throw error;
+    if (fetchError) {
+      console.error('Error fetching complaint:', fetchError.message);
+      return res.status(500).json({ error: fetchError.message });
+    }
 
-    if (data.sender !== userId) {
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint not found' });
+    }
+
+    if (complaint.sender !== userId) {
       return res.status(403).json({ message: 'Unauthorized to delete this complaint' });
     }
 
     // Delete the complaint
     const { error: deleteError } = await supabase
-      .from('complaints')
+      .from('messages')
       .delete()
       .match({ id: complaintId });
 
-    if (deleteError) throw deleteError;
+    if (deleteError) {
+      console.error('Error deleting complaint:', deleteError.message);
+      return res.status(500).json({ error: deleteError.message });
+    }
 
     res.status(200).json({ message: 'Complaint deleted successfully' });
   } catch (error) {
-    console.error('Error deleting complaint:', error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error('Error handling request:', error.message);
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 // Route for user login
 app.post('/login', async (req, res) => {
