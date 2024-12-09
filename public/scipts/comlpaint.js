@@ -68,7 +68,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
         document.getElementById('responseStatus').textContent = data;
         document.getElementById('responseForm').reset();
         document.getElementById('responseForm').style.display = 'none';
-        fetchComplaints();
+        fetchComplaints(); // Reload complaints after response
     })
     .catch(error => {
         document.getElementById('responseStatus').textContent = 'Error: ' + error.message;
