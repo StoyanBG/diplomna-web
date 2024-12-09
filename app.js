@@ -71,6 +71,38 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.delete('/delete-complaint/:id', authenticateToken, async (req, res) => {
+  const complaintId = req.params.id;
+  const userId = req.user.userId;
+
+  try {
+    // Check if the complaint belongs to the user
+    const { data, error } = await supabase
+      .from('complaints')
+      .select('sender')
+      .eq('id', complaintId)
+      .single();
+
+    if (error) throw error;
+
+    if (data.sender !== userId) {
+      return res.status(403).json({ message: 'Unauthorized to delete this complaint' });
+    }
+
+    // Delete the complaint
+    const { error: deleteError } = await supabase
+      .from('complaints')
+      .delete()
+      .match({ id: complaintId });
+
+    if (deleteError) throw deleteError;
+
+    res.status(200).json({ message: 'Complaint deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting complaint:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 // Route for user login
 app.post('/login', async (req, res) => {
