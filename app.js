@@ -71,6 +71,22 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Middleware to verify JWT token
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
+
+  if (!token) return res.sendStatus(401); // No token provided
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user; // Attach user info to the request object
+    next();
+  });
+}
+
+// Route for deleting a complaint
 app.delete('/delete-complaint/:id', authenticateToken, async (req, res) => {
   const complaintId = req.params.id;
   const userId = req.user.userId;
@@ -125,20 +141,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Middleware to verify JWT token
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
-
-  if (!token) return res.sendStatus(401); // No token provided
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403); // Invalid token
-    req.user = user; // Attach user info to the request object
-    next();
-  });
-}
-
 // Route for saving user choices
 app.post('/save-choice', authenticateToken, async (req, res) => {
   const { lineIds } = req.body;
@@ -180,7 +182,6 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
   }
 });
 
-// Route for getting complaints
 // Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
@@ -229,8 +230,6 @@ app.get('/get-complaints', async (req, res) => {
   }
 });
 
-
-
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => { 
   const { subject, message } = req.body;
@@ -265,9 +264,6 @@ app.post('/send-message', authenticateToken, async (req, res) => {
   }
 });
 
-
-
-
 // Route for responding to a message
 app.post('/respond-message', authenticateToken, async (req, res) => {
   const { messageId, response } = req.body;
@@ -285,26 +281,28 @@ app.post('/respond-message', authenticateToken, async (req, res) => {
 
     const responderName = responderData.name;
 
-    const { error } = await supabase
+    // Insert the response into the 'responses' table
+    const { error: insertError } = await supabase
       .from('responses')
       .insert({
         message_id: messageId,
         responder: responder,
-        responder_name: responderName, // Store the responder's name
-        response_message: response,
-        created_at: new Date().toISOString(),
+        response,
+        responder_name: responderName,
+        created_at: new Date().toISOString()
       });
 
-    if (error) throw error;
+    if (insertError) throw insertError;
 
-    res.status(200).send('Response sent successfully');
+    res.status(200).json({ message: 'Response added successfully' });
   } catch (error) {
-    console.error('Error responding to message:', error);
-    res.status(500).send('Server error');
+    console.error('Error adding response:', error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Start the server
-app.listen(3000, () => {
-  console.log(`Server is running on http://localhost:3000`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

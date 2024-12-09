@@ -23,10 +23,8 @@ function fetchComplaints() {
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <div class="complaint-item">
-                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender})</p> <!-- Ensure 'sender' matches the property -->
-                        <div class="responses">
-                            ${responsesHtml}
-                        </div>
+                        <p><strong>${complaint.subject}</strong> - ${complaint.message} (от ${complaint.sender})</p>
+                        <div class="responses">${responsesHtml}</div>
                         <button class="btn btn-danger" onclick="deleteComplaint('${complaint.id}')">Изтрий</button>
                         <button class="btn btn-primary" onclick="showResponseForm('${complaint.id}')">Отговорете</button>
                     </div>
@@ -34,10 +32,12 @@ function fetchComplaints() {
                 complaintsList.appendChild(li);
             });
         })
-        .catch(error => console.error('Error fetching complaints:', error));
+        .catch(error => {
+            console.error('Error fetching complaints:', error);
+            // Handle error display or user feedback here
+        });
 }
 
-// Function to delete a complaint
 function deleteComplaint(complaintId) {
     fetch(`/delete-complaint/${complaintId}`, {
         method: 'DELETE',
@@ -58,17 +58,16 @@ function deleteComplaint(complaintId) {
     })
     .catch(error => {
         console.error('Error deleting complaint:', error);
+        // Display error to the user
     });
 }
 
-// Show response form and set the message ID
 function showResponseForm(messageId) {
     document.getElementById('responseForm').style.display = 'block';
     document.getElementById('messageId').value = messageId; // Set the hidden message ID
     document.getElementById('response').focus(); // Focus on the response textarea
 }
 
-// Handle response form submission
 document.getElementById('responseForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const messageId = document.getElementById('messageId').value;
@@ -96,10 +95,10 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     })
     .catch(error => {
         document.getElementById('responseStatus').textContent = 'Error: ' + error.message;
+        // Display error to the user
     });
 });
 
-// Redirect to the complaint page based on token presence
 function redirectToComplaintPage() {
     const token = sessionStorage.getItem('token');
     if (token) {
