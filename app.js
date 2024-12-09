@@ -87,49 +87,40 @@ function authenticateToken(req, res, next) {
 }
 
 // Route for deleting a complaint
-// Route for deleting a complaint
 app.delete('/delete-complaint/:id', authenticateToken, async (req, res) => {
   const complaintId = req.params.id;
-  const userId = req.user.userId;
+  const { password } = req.body;
+
+  // Replace 'your-secret-password' with an environment variable or secure storage
+  const SECRET_PASSWORD = 'admin';
+
+  if (password !== SECRET_PASSWORD) {
+      return res.status(403).json({ message: 'Incorrect password' });
+  }
 
   try {
-    // Fetch the complaint details to verify ownership
-    const { data: complaint, error: fetchError } = await supabase
-      .from('messages')
-      .select('sender')
-      .eq('id', complaintId)
-      .single();
+      const { data: complaint, error: fetchError } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('id', complaintId)
+          .single();
 
-    if (fetchError) {
-      console.error('Error fetching complaint:', fetchError.message);
-      return res.status(500).json({ error: fetchError.message });
-    }
+      if (fetchError) return res.status(500).json({ error: fetchError.message });
+      if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
 
-    if (!complaint) {
-      return res.status(404).json({ message: 'Complaint not found' });
-    }
+      const { error: deleteError } = await supabase
+          .from('messages')
+          .delete()
+          .eq('id', complaintId);
 
-    if (complaint.sender !== userId) {
-      return res.status(403).json({ message: 'Unauthorized to delete this complaint' });
-    }
+      if (deleteError) return res.status(500).json({ error: deleteError.message });
 
-    // Delete the complaint
-    const { error: deleteError } = await supabase
-      .from('messages')
-      .delete()
-      .match({ id: complaintId });
-
-    if (deleteError) {
-      console.error('Error deleting complaint:', deleteError.message);
-      return res.status(500).json({ error: deleteError.message });
-    }
-
-    res.status(200).json({ message: 'Complaint deleted successfully' });
+      res.status(200).json({ message: 'Complaint deleted successfully' });
   } catch (error) {
-    console.error('Error handling request:', error.message);
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
+
 
 
 // Route for user login
