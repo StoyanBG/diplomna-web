@@ -92,6 +92,67 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// Initialize a default admin user if not already present
+(async () => {
+  const defaultAdminEmail = 'admin@admin.com';
+  const defaultAdminPassword = 'admin';
+  const { data: adminExists, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', defaultAdminEmail)
+    .single();
+
+  if (error) throw error;
+
+  if (!adminExists) {
+    const { data: newAdmin, error: insertError } = await supabase
+      .from('users')
+      .insert([{ name: 'Admin', email: defaultAdminEmail, password: defaultAdminPassword }])
+      .select('*')
+      .single();
+
+    if (insertError) throw insertError;
+  }
+})();
+app.post('/admin-login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Admin authentication
+    const admin = await getUserByEmail(email);
+
+    if (!admin) return res.status(404).json({ error: 'Admin not found' });
+
+    // Assuming the admin password is also stored in the Supabase database
+    if (admin.password !== password) return res.status(400).json({ error: 'Invalid admin credentials' });
+
+    // Generate a JWT token for admin
+    const adminToken = jwt.sign({ userId: admin.id, email: admin.email, name: admin.name }, JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ message: 'Admin logged in successfully', token: adminToken });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route for deleting a user
+app.post('/delete-user', authenticateToken, async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', userId);
+
+    if (error) throw error;
+
+    res.status(200).send('User deleted successfully');
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {

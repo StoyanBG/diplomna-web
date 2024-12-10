@@ -1,0 +1,23 @@
+<!-- admin-dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Admin Dashboard</h2>
+    <h3>Manage Users</h3>
+    <form id="delete-user-form">
+      <input type="text" id="user-id" placeholder="User ID to delete" required>
+      <button type="submit">Delete User</button>
+    </form>
+    <div id="user-list"></div>
+  </div>
+
+  <script src="scripts/admin-dashboard.js"></script>
+</body>
+</html>
