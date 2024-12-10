@@ -270,37 +270,18 @@ app.post('/send-message', authenticateToken, async (req, res) => {
 // Route for responding to a message
 app.post('/respond-message', authenticateToken, async (req, res) => {
   const { messageId, response } = req.body;
-  const responder = req.user.userId;
+  const responderName = req.user.name;
 
   try {
-    // Fetch the responder's name
-    const { data: responderData, error: fetchError } = await supabase
-      .from('users')
-      .select('name')
-      .eq('id', responder)
-      .single();
+      const { error } = await supabase
+          .from('responses')
+          .insert({ message_id: messageId, response_message: response, responder_name: responderName });
 
-    if (fetchError) throw fetchError;
+      if (error) throw error;
 
-    const responderName = responderData.name;
-
-    // Insert the response into the 'responses' table
-    const { error: insertError } = await supabase
-      .from('responses')
-      .insert({
-        message_id: messageId,
-        responder: responder,
-        response,
-        responder_name: responderName,
-        created_at: new Date().toISOString()
-      });
-
-    if (insertError) throw insertError;
-
-    res.status(200).json({ message: 'Response added successfully' });
+      res.status(200).json({ message: 'Response submitted successfully' });
   } catch (error) {
-    console.error('Error adding response:', error.message);
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
 
