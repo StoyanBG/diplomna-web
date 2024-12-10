@@ -72,57 +72,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Middleware to verify JWT token
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
-
-  if (!token) return res.sendStatus(401); // No token provided
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403); // Invalid token
-    req.user = user; // Attach user info to the request object
-    next();
-  });
-}
-
-// Route for deleting a complaint
-app.delete('/delete-complaint/:id', authenticateToken, async (req, res) => {
-  const complaintId = req.params.id;
-  const { password } = req.body;
-
-  // Replace 'your-secret-password' with an environment variable or secure storage
-  const SECRET_PASSWORD = 'admin';
-
-  if (password !== SECRET_PASSWORD) {
-      return res.status(403).json({ message: 'Incorrect password' });
-  }
-
-  try {
-      const { data: complaint, error: fetchError } = await supabase
-          .from('messages')
-          .select('*')
-          .eq('id', complaintId)
-          .single();
-
-      if (fetchError) return res.status(500).json({ error: fetchError.message });
-      if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
-
-      const { error: deleteError } = await supabase
-          .from('messages')
-          .delete()
-          .eq('id', complaintId);
-
-      if (deleteError) return res.status(500).json({ error: deleteError.message });
-
-      res.status(200).json({ message: 'Complaint deleted successfully' });
-  } catch (error) {
-      res.status(500).json({ error: error.message });
-  }
-});
-
-
-
 // Route for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -143,6 +92,20 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Middleware to verify JWT token
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
+
+  if (!token) return res.sendStatus(401); // No token provided
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user; // Attach user info to the request object
+    next();
+  });
+}
 
 // Route for saving user choices
 app.post('/save-choice', authenticateToken, async (req, res) => {
@@ -184,72 +147,56 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Route for getting complaints
+// Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
+    // Fetch complaints where the receiver is 'admin'
     const { data: complaints, error } = await supabase
       .from('messages')
       .select('*')
-      .eq('receiver', 'admin');
+      .eq('receiver', 'admin'); // Ensure this logic fits your requirements
 
-    if (error) {
-      console.error('Error fetching complaints:', error.message);
-      throw error;
-    }
+    if (error) throw error;
 
-    const complaintsWithResponses = await Promise.all(
-      complaints.map(async (complaint) => {
-        try {
-          const { data: responses, error: responseError } = await supabase
-            .from('responses')
-            .select('*')
-            .eq('message_id', complaint.id);
+    // Fetch responses for each complaint
+    const complaintsWithResponses = await Promise.all(complaints.map(async (complaint) => {
+      const { data: responses, error: responseError } = await supabase
+        .from('responses')
+        .select('*')
+        .eq('message_id', complaint.id);
+        
+      if (responseError) throw responseError;
 
-          if (responseError) {
-            console.error('Error fetching responses for complaint:', complaint.id, responseError.message);
-            throw responseError;
-          }
+      // Attach responder names to responses
+      const responsesWithNames = await Promise.all(responses.map(async (res) => {
+        const { data: user, error: userError } = await supabase
+          .from('users')
+          .select('name')
+          .eq('id', res.responder) // Assuming 'responder' stores the user ID
+          .single();
+        
+        if (userError) throw userError;
+        return { ...res, responder_name: user.name }; // Add responder name to response
+      }));
 
-          const responsesWithNames = await Promise.all(
-            (responses || []).map(async (response) => {
-              try {
-                const { data: user, error: userError } = await supabase
-                  .from('users')
-                  .select('name')
-                  .eq('id', response.responder)
-                  .single();
+      return { ...complaint, responses: responsesWithNames }; // Combine complaint with its responses
+    }));
 
-                if (userError) {
-                  console.error('Error fetching user for response:', response.id, userError.message);
-                  throw userError;
-                }
-
-                return { ...response, responder_name: user ? user.name : null };
-              } catch (error) {
-                console.error('Nested error in response processing:', error.message);
-                throw error;
-              }
-            })
-          );
-
-          return { ...complaint, responses: responsesWithNames };
-        } catch (error) {
-          console.error('Nested error in complaint processing:', error.message);
-          throw error;
-        }
-      })
-    );
-
-    const complaintsWithSenderName = complaintsWithResponses.map((complaint) => ({
-      ...complaint,
-      sender: complaint.sender,
+    // Combine complaint data with sender's name
+    const complaintsWithSenderName = await Promise.all(complaintsWithResponses.map(async (complaint) => {
+      // Get the sender's name from the messages table
+      const senderName = complaint.sender; // sender already contains the name based on your earlier update
+      return { ...complaint, sender: senderName }; // Return complaint with sender name
     }));
 
     res.json(complaintsWithSenderName);
   } catch (error) {
-    console.error('Error in /get-complaints route:', error.message);
-    res.status(500).json({ error: 'Failed to fetch complaints' });
+    res.status(500).json({ error: error.message });
   }
 });
+
 
 
 // Route for sending a message
@@ -286,26 +233,46 @@ app.post('/send-message', authenticateToken, async (req, res) => {
   }
 });
 
+
+
+
 // Route for responding to a message
 app.post('/respond-message', authenticateToken, async (req, res) => {
   const { messageId, response } = req.body;
-  const responderName = req.user.name;
+  const responder = req.user.userId;
 
   try {
-      const { error } = await supabase
-          .from('responses')
-          .insert({ message_id: messageId, response_message: response, responder_name: responderName });
+    // Fetch the responder's name
+    const { data: responderData, error: fetchError } = await supabase
+      .from('users')
+      .select('name')
+      .eq('id', responder)
+      .single();
 
-      if (error) throw error;
+    if (fetchError) throw fetchError;
 
-      res.status(200).json({ message: 'Response submitted successfully' });
+    const responderName = responderData.name;
+
+    const { error } = await supabase
+      .from('responses')
+      .insert({
+        message_id: messageId,
+        responder: responder,
+        responder_name: responderName, // Store the responder's name
+        response_message: response,
+        created_at: new Date().toISOString(),
+      });
+
+    if (error) throw error;
+
+    res.status(200).send('Response sent successfully');
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    console.error('Error responding to message:', error);
+    res.status(500).send('Server error');
   }
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log(`Server is running on http://localhost:3000`);
 });
