@@ -196,42 +196,52 @@ app.get('/get-complaints', async (req, res) => {
 
     if (error) throw error;
 
-    // Fetch responses for each complaint
-    const complaintsWithResponses = await Promise.all(complaints.map(async (complaint) => {
-      const { data: responses, error: responseError } = await supabase
-        .from('responses')
-        .select('*')
-        .eq('message_id', complaint.id);
-        
-      if (responseError) throw responseError;
+    // Process complaints to include responses and associated data
+    const complaintsWithResponses = await Promise.all(
+      complaints.map(async (complaint) => {
+        // Fetch responses for the complaint
+        const { data: responses, error: responseError } = await supabase
+          .from('responses')
+          .select('*')
+          .eq('message_id', complaint.id);
 
-      // Attach responder names to responses
-      const responsesWithNames = await Promise.all(responses.map(async (res) => {
-        const { data: user, error: userError } = await supabase
-          .from('users')
-          .select('name')
-          .eq('id', res.responder) // Assuming 'responder' stores the user ID
-          .single();
-        
-        if (userError) throw userError;
-        return { ...res, responder_name: user.name }; // Add responder name to response
-      }));
+        if (responseError) throw responseError;
 
-      return { ...complaint, responses: responsesWithNames }; // Combine complaint with its responses
-    }));
+        // Attach responder names to responses
+        const responsesWithNames = await Promise.all(
+          (responses || []).map(async (response) => {
+            const { data: user, error: userError } = await supabase
+              .from('users')
+              .select('name')
+              .eq('id', response.responder) // Assuming 'responder' stores the user ID
+              .single();
 
-    // Combine complaint data with sender's name
-    const complaintsWithSenderName = await Promise.all(complaintsWithResponses.map(async (complaint) => {
-      // Get the sender's name from the messages table
-      const senderName = complaint.sender; // sender already contains the name based on your earlier update
-      return { ...complaint, sender: senderName }; // Return complaint with sender name
-    }));
+            if (userError) throw userError;
+            return { ...response, responder_name: user ? user.name : null }; // Add responder name or null
+          })
+        );
 
+        // Add responses to the complaint
+        return { ...complaint, responses: responsesWithNames };
+      })
+    );
+
+    // Attach sender's name to complaints
+    const complaintsWithSenderName = await Promise.all(
+      complaintsWithResponses.map(async (complaint) => {
+        const senderName = complaint.sender; // Assuming sender already stores the name
+        return { ...complaint, sender: senderName }; // Include sender name in the complaint object
+      })
+    );
+
+    // Send the enriched data as JSON
     res.json(complaintsWithSenderName);
   } catch (error) {
+    console.error('Error fetching complaints:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => { 
