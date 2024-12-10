@@ -184,61 +184,70 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-// Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
-    // Fetch complaints where the receiver is 'admin'
     const { data: complaints, error } = await supabase
       .from('messages')
       .select('*')
-      .eq('receiver', 'admin'); // Ensure this logic fits your requirements
+      .eq('receiver', 'admin');
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error fetching complaints:', error.message);
+      throw error;
+    }
 
-    // Process complaints to include responses and associated data
     const complaintsWithResponses = await Promise.all(
       complaints.map(async (complaint) => {
-        // Fetch responses for the complaint
-        const { data: responses, error: responseError } = await supabase
-          .from('responses')
-          .select('*')
-          .eq('message_id', complaint.id);
+        try {
+          const { data: responses, error: responseError } = await supabase
+            .from('responses')
+            .select('*')
+            .eq('message_id', complaint.id);
 
-        if (responseError) throw responseError;
+          if (responseError) {
+            console.error('Error fetching responses for complaint:', complaint.id, responseError.message);
+            throw responseError;
+          }
 
-        // Attach responder names to responses
-        const responsesWithNames = await Promise.all(
-          (responses || []).map(async (response) => {
-            const { data: user, error: userError } = await supabase
-              .from('users')
-              .select('name')
-              .eq('id', response.responder) // Assuming 'responder' stores the user ID
-              .single();
+          const responsesWithNames = await Promise.all(
+            (responses || []).map(async (response) => {
+              try {
+                const { data: user, error: userError } = await supabase
+                  .from('users')
+                  .select('name')
+                  .eq('id', response.responder)
+                  .single();
 
-            if (userError) throw userError;
-            return { ...response, responder_name: user ? user.name : null }; // Add responder name or null
-          })
-        );
+                if (userError) {
+                  console.error('Error fetching user for response:', response.id, userError.message);
+                  throw userError;
+                }
 
-        // Add responses to the complaint
-        return { ...complaint, responses: responsesWithNames };
+                return { ...response, responder_name: user ? user.name : null };
+              } catch (error) {
+                console.error('Nested error in response processing:', error.message);
+                throw error;
+              }
+            })
+          );
+
+          return { ...complaint, responses: responsesWithNames };
+        } catch (error) {
+          console.error('Nested error in complaint processing:', error.message);
+          throw error;
+        }
       })
     );
 
-    // Attach sender's name to complaints
-    const complaintsWithSenderName = await Promise.all(
-      complaintsWithResponses.map(async (complaint) => {
-        const senderName = complaint.sender; // Assuming sender already stores the name
-        return { ...complaint, sender: senderName }; // Include sender name in the complaint object
-      })
-    );
+    const complaintsWithSenderName = complaintsWithResponses.map((complaint) => ({
+      ...complaint,
+      sender: complaint.sender,
+    }));
 
-    // Send the enriched data as JSON
     res.json(complaintsWithSenderName);
   } catch (error) {
-    console.error('Error fetching complaints:', error.message);
-    res.status(500).json({ error: error.message });
+    console.error('Error in /get-complaints route:', error.message);
+    res.status(500).json({ error: 'Failed to fetch complaints' });
   }
 });
 
