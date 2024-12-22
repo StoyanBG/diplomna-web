@@ -83,13 +83,9 @@
 
       const title = document.getElementById('news-title').value;
       const content = document.getElementById('news-content').value;
-      const token = localStorage.getItem('authToken'); // Get the auth token from localStorage
+      
 
-      if (!token) {
-        alert('You are not authorized. Please log in.');
-        window.location.href = '/admin-login.html'; // Redirect to login page if no token
-        return;
-      }
+      
 
       try {
         const response = await fetch('/send-news', {
