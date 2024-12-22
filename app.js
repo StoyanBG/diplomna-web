@@ -258,11 +258,16 @@ app.get('/get-news', async (req, res) => {
 
     if (error) throw error;
 
+    if (news.length === 0) {
+      return res.status(404).json({ message: 'No news available' });
+    }
+
     res.json(news);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {
