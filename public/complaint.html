@@ -7,26 +7,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complaints and Responses</title>
     <link rel="stylesheet" href="css/main1.css">
-    <link rel="stylesheet" href="css/navFirst.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/complaints.css">
     <script src="scipts/scriptNavF.js"></script>
+    <style>footer{ margin-top: 62.5vh;
+
+    }</style>
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">
-                <a href="index.html"><h1>Пловдив транспорт</h1></a>
+            <div class="nav-left">
+                <ul class="menu">
+                    <li class="menu-item">
+                        <a href="#">
+                            <div class="hamburger">
+                                <div></div>
+                            </div>
+                        </a>
+                        <ul class="submenu">
+                            <li class="menu-item"><a href="/allLines.html" ><h6>Всички линии</h6></a></li>
+                            <li class="menu-item" id="main-page-button"><a href="/cl.html"><h6>Избор на любими линии</h6></a></li>
+                            <li class="menu-item"><a href="/fl.html" ><h6>Любими линии</h6></a></li>
+                            <li class="menu-item"><a href="/feedback.html"><h6>Изпратете отзив</h6></a></li>
+                            
+                        <li class="menu-item"><a href="/complaint.html" ><h6>Сегашни проблеми</h6></a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            <button class="hamburger" aria-label="Toggle navigation">
-                ☰
-            </button>
-            <ul class="nav-links">
-                <li><a href="allLines.html" id="main-page-button">Всички линии</a></li>
-                <li><a onclick="redirectToComplaintPage()">Съобщете за проблем</a></li>
-                <li><a href="feedback.html">Свържете се с нас</a></li>
-                <li><a href="login.html">Влизане</a></li>
-                <li><a href="registration.html">Регистрация</a></li>
-            </ul>
+            <div class="nav-center">
+                <span><h4>Пловдив транспорт</h4></span>
+            </div>
+            <div class="nav-right">
+              <span >
+                <a href="/index.html"><button type="button" class="btn btn-primary"><h5>Изход</h5></button> </a>
+              </span>
+            </div>
         </nav>
     </header>
 
