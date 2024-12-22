@@ -134,7 +134,20 @@ app.post('/admin-login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.get('/users', authenticateToken, async (req, res) => {
+  try {
+    const { data: users, error } = await supabase
+      .from('users')
+      .select('id, name, email'); // Adjust fields as needed
 
+    if (error) throw error;
+
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).send('Server error');
+  }
+});
 // Route for deleting a user
 app.post('/delete-user', authenticateToken, async (req, res) => {
   const { userId } = req.body;
