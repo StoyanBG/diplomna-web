@@ -138,14 +138,13 @@ app.get('/users', authenticateToken, async (req, res) => {
   try {
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, name, email'); // Adjust fields as needed
+      .select('id, name, email');
 
     if (error) throw error;
 
     res.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).send('Server error');
+    res.status(500).json({ error: error.message });
   }
 });
 // Route for deleting a user

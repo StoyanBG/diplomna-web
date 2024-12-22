@@ -39,7 +39,7 @@ async function fetchUserList() {
     const users = await response.json();
 
     if (response.ok) {
-      userList.innerHTML = users.map(user => `<p>${user.name} (${user.email})</p>`).join('');
+      userList.innerHTML = users.map(user => `<p>${user.id}: ${user.name} (${user.email})</p>`).join('');
     } else {
       alert('Failed to fetch users');
     }
