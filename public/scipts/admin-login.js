@@ -20,7 +20,7 @@ adminLoginForm.addEventListener('submit', async (event) => {
     if (response.ok) {
       // Store the admin token and redirect to an admin dashboard or admin panel
       sessionStorage.setItem('adminToken', result.token);
-      window.location.href = '../admin-dashboard1.html';
+      window.location.href = '../admin-dashboard.html';
     } else {
       alert(result.error);
     }
