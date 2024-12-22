@@ -227,7 +227,7 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
 });
 
 // Route for posting news (only accessible by admin)
-app.post('/post-news', authenticateToken, async (req, res) => {
+app.post('/send-news', authenticateToken, async (req, res) => {
   const { title, content } = req.body;
 
   // Ensure the user is an admin
