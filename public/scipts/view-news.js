@@ -2,10 +2,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const newsList = document.getElementById('novList');
     
     try {
-        // Fetch the news data from the server without checking for the JWT token
+        // Fetch the news data from the server
         const response = await fetch('/get-news', {
             method: 'GET',
-            // No Authorization header required anymore
         });
   
         const data = await response.json();
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (data && data.news && data.news.length > 0) {
                 // Loop through the news data and display it
                 data.news.forEach(newsItem => {
+                    // Generate HTML for each news item
                     const listItem = document.createElement('li');
                     listItem.classList.add('news-item');
                     listItem.innerHTML = `

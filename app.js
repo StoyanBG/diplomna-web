@@ -251,20 +251,19 @@ app.post('/send-news', authenticateToken, async (req, res) => {
 // Route for fetching news
 app.get('/get-news', async (req, res) => {
   try {
-    const { data: news, error } = await supabase
-      .from('news')
-      .select('*')
-      .order('created_at', { ascending: false }); // Get the most recent news first
+      const { data: news, error } = await supabase
+          .from('news') // Your table name for news
+          .select('*')
+          .order('created_at', { ascending: false });
 
-    if (error) throw error;
+      if (error) {
+          return res.status(500).json({ message: 'Failed to fetch news' });
+      }
 
-    if (news.length === 0) {
-      return res.status(404).json({ message: 'No news available' });
-    }
-
-    res.json(news);
+      res.json({ news });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.error('Error fetching news:', error);
+      res.status(500).json({ message: 'Error fetching news' });
   }
 });
 
