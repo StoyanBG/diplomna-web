@@ -18,10 +18,13 @@ adminLoginForm.addEventListener('submit', async (event) => {
     const result = await response.json();
 
     if (response.ok) {
-      // Store the admin token and redirect to an admin dashboard or admin panel
+      // Store the admin token in sessionStorage
       sessionStorage.setItem('adminToken', result.token);
+
+      // Redirect to the admin dashboard or admin panel
       window.location.href = '../admin-dashboard.html';
     } else {
+      // Show error message if login fails
       alert(result.error);
     }
   } catch (error) {
