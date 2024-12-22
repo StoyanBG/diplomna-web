@@ -226,7 +226,43 @@ app.get('/selected-lines', authenticateToken, async (req, res) => {
   }
 });
 
-// Route for getting complaints
+// Route for posting news (only accessible by admin)
+app.post('/post-news', authenticateToken, async (req, res) => {
+  const { title, content } = req.body;
+
+  // Ensure the user is an admin
+  if (req.user.email !== 'admin@admin.com') {
+    return res.status(403).json({ error: 'You are not authorized to post news' });
+  }
+
+  try {
+    const { error } = await supabase
+      .from('news')
+      .insert([{ title, content }]);
+
+    if (error) throw error;
+
+    res.status(200).json({ message: 'News posted successfully' });
+  } catch (error) {
+    console.error('Error posting news:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+// Route for fetching news
+app.get('/get-news', async (req, res) => {
+  try {
+    const { data: news, error } = await supabase
+      .from('news')
+      .select('*')
+      .order('created_at', { ascending: false }); // Get the most recent news first
+
+    if (error) throw error;
+
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 // Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
   try {

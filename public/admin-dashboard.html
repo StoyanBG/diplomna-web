@@ -1,26 +1,72 @@
-<!-- admin-dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
- 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="css/admin.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    h1 {
+      font-size: 36px;
+      color: #333;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    button:focus {
+      outline: none;
+    }
+    .logout-btn {
+      margin-top: 40px;
+      padding: 10px 20px;
+      background-color: #dc3545;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    .logout-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
 </head>
 <body>
-  <div class="dashboard-container">
-    <h2>Admin Dashboard</h2>
-    <h3>Manage Users</h3>
-    <form id="delete-user-form">
-      <input type="text" id="user-id" placeholder="User ID to delete" required>
-      <button type="submit">Delete User</button>
-      <a href="/"><button type="button" class="btn btn-primary">Home</button></a>
-    </form>
-    <div id="user-list"></div>
-  </div>
 
-  <script src="scipts/admin-dashboard.js"></script>
+  <div class="container">
+    <h1>Welcome to Admin Dashboard</h1>
+
+    <div class="btn-group">
+      <a href="delete-user.html"><button>Delete User</button></a>
+      <a href="send-news.html"><button>Send News</button></a>
+    </div>
+
+    <a href="/"><button class="logout-btn">Logout</button></a>
+  </div>
 </body>
 </html>

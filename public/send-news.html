@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send News</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    h1 {
+      font-size: 36px;
+      color: #333;
+    }
+    .news-form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background-color: #28a745;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .back-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .back-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Send News</h1>
+    <div class="news-form">
+      <form id="send-news-form">
+        <input type="text" id="news-title" placeholder="News Title" required>
+        <textarea id="news-content" placeholder="News Content" rows="5" required></textarea>
+        <button type="submit">Send News</button>
+      </form>
+    </div>
+
+    <a href="admin-dashboard.html" class="back-btn">Back to Dashboard</a>
+  </div>
+
+  <script>
+    document.getElementById('send-news-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('news-title').value;
+      const content = document.getElementById('news-content').value;
+      const token = localStorage.getItem('authToken'); // Get the auth token from localStorage
+
+      if (!token) {
+        alert('You are not authorized. Please log in.');
+        window.location.href = '/admin-login.html'; // Redirect to login page if no token
+        return;
+      }
+
+      try {
+        const response = await fetch('/send-news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ title, content })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('News sent successfully!');
+          document.getElementById('send-news-form').reset();
+        } else {
+          alert('Failed to send news: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error sending news:', error);
+        alert('Error sending news. Please try again.');
+      }
+    });
+  </script>
+
+</body>
+</html>
