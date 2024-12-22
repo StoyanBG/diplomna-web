@@ -144,9 +144,6 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
       .from('users')
       .delete()
       .eq('id', userId)
-      .from('choices')
-      .delete()
-      .eq('user_id',userId)
 
     if (error) throw error;
 
