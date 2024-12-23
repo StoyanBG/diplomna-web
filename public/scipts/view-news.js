@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const listItem = document.createElement('li');
                     listItem.classList.add('news-item');
                     listItem.innerHTML = `
-                    <div class="news-item">
+                    
                         <h3>${newsItem.title}</h3>
                         <p>${newsItem.content}</p>
                         <small>Published on: ${new Date(newsItem.created_at).toLocaleDateString()}</small>
