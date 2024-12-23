@@ -24,3 +24,17 @@ body{
 .real-time-info p {
     font-size: 1.2rem;
 }
+#novList{
+    list-style-type: none;
+    padding: 0;
+}
+.news-item{
+    background-color: #f4f4f4;
+    border-radius: 15px;
+    padding: 1rem;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    margin: 2rem auto;
+    width: 90%;
+}
