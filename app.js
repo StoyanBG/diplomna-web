@@ -266,6 +266,25 @@ app.get('/get-news', async (req, res) => {
       res.status(500).json({ message: 'Error fetching news' });
   }
 });
+app.delete('/delete-news/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { error } = await supabase
+      .from('news')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      return res.status(500).json({ message: 'Failed to delete news' });
+    }
+
+    res.status(200).json({ message: 'News deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting news:', error);
+    res.status(500).json({ message: 'Error deleting news' });
+  }
+});
 
 // Route for getting complaints
 app.get('/get-complaints', async (req, res) => {
