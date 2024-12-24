@@ -9,3 +9,43 @@
     justify-content: center;
     align-items: center;
 }
+@media (max-width: 768px) {
+    .button-div {
+        flex: 1 1 45%; /* 2 items per row on smaller screens */
+    }
+
+    .button-div img {
+        width: 100%; /* Make the image fill the button */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 350px; /* Increase the max height for images on smaller screens */
+    }
+
+    .button-div h5 {
+        font-size: 18px; /* Adjust text size for mobile */
+    }
+}
+button {
+    width: 100%; /* Ensure button takes the full width */
+    padding: 15px; /* Increase padding for larger buttons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #ffc107; /* Button color */
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button img {
+    width: 100%; /* Make image fill the width of the button */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 400px; /* Increase max width for images */
+    margin-bottom: 10px;
+}
+
+button h5 {
+    font-size: 20px; /* Increase text size */
+    color: #333;
+    text-align: center;
+}
