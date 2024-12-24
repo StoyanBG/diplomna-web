@@ -6,16 +6,30 @@
 
 .button-div {
     margin: 1%;
-    max-width: 400px; /* Control size of the button container */
-    flex: 1 1 calc(33% - 10px); /* 3 items per row on larger screens */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+@media (max-width: 768px) {
+    .button-div {
+        flex: 1 1 45%; /* 2 items per row on smaller screens */
+    }
+
+    .button-div img {
+        width: 100%; /* Make the image fill the button */
+        height: auto; /* Maintain aspect ratio */
+        max-height: 350px; /* Increase the max height for images on smaller screens */
+    }
+
+    .button-div h5 {
+        font-size: 18px; /* Adjust text size for mobile */
+    }
+}
+
 button {
-    width: 100%; /* Ensure button takes full width */
-    padding: 10px;
+    width: 100%; /* Ensure button takes the full width */
+    padding: 15px; /* Increase padding for larger buttons */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,39 +43,12 @@ button {
 button img {
     width: 100%; /* Make image fill the width of the button */
     height: auto; /* Maintain aspect ratio */
-    max-width: 300px; /* Control image size for desktop */
-    max-height: 150px; /* Limit height of the image */
-    object-fit: cover; /* Ensures image does not stretch */
+    max-width: 400px; /* Increase max width for images */
     margin-bottom: 10px;
 }
 
 button h5 {
-    font-size: 18px;
+    font-size: 20px; /* Increase text size */
     color: #333;
     text-align: center;
-}
-
-/* Adjustments for mobile devices */
-@media (max-width: 768px) {
-    .button-div {
-        flex: 1 1 45%; /* 2 items per row on smaller screens */
-    }
-
-    .button-div img {
-        width: 100%; /* Ensure images fill the button container */
-        max-height: 250px; /* Control image height for mobile */
-        object-fit: cover; /* Prevent stretching and maintain aspect ratio */
-    }
-
-    .button-div h5 {
-        font-size: 16px; /* Adjust text size for mobile */
-    }
-
-    button {
-        padding: 15px; /* Larger buttons for mobile */
-    }
-
-    button img {
-        max-width: 300px; /* Control max width on mobile */
-    }
 }
