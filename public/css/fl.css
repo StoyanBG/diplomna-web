@@ -3,13 +3,39 @@
     flex-wrap: wrap; 
     justify-content: center; 
 }
+
 .button-div {
     margin: 1%;
-    
-}
-@media screen and (max-width: 768px) {
-
-    
-    
+    max-width: 300px; /* Limit button width for better mobile layout */
+    flex: 1 1 calc(33% - 10px); /* Allow buttons to take up 1/3 of the row on large screens */
+    display: flex;
+    justify-content: center;
 }
 
+@media (max-width: 768px) {
+    .button-div {
+        flex: 1 1 45%; /* Make buttons take up 45% on smaller screens */
+    }
+
+    .button-div img {
+        width: 100%; /* Ensure images are responsive */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .button-div h5 {
+        font-size: 14px; /* Adjust font size for better mobile readability */
+    }
+}
+
+button {
+    width: 100%; /* Make buttons fill the available width */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button img {
+    max-width: 50px; /* Ensure images do not get too large */
+    margin-right: 10px;
+}
