@@ -1,9 +1,11 @@
 .button-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+    flex-wrap: wrap; 
+    justify-content: center; 
 }
 .button-div {
     margin: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
