@@ -11,7 +11,14 @@ body {
 
 /* Ensure the main content stretches between the header and footer */
 .container {
-    flex: 1;
+    flex: 1; /* Pushes the footer down if there's not enough content */
+    display: flex;
+    flex-direction: column;
+}
+
+/* News Section - Allows dynamic height */
+.real-time-info {
+    flex: 1; /* Expands as needed when news items are added */
 }
 
 /* Footer styles */
