@@ -54,16 +54,14 @@ body {
     background-color: #0056b3;
   }
   
-  /* Links */
-  a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
+a{
+  text-decoration: none;
+  color: white;
+}
+a:hover{
+  text-decoration: none;
+  color: white;
+}
   /* Admin dashboard specific styles */
   .dashboard-container h2 {
     margin-bottom: 20px;
