@@ -7,35 +7,49 @@
 .button-div {
     margin: 1%;
     max-width: 300px; /* Limit button width for better mobile layout */
-    flex: 1 1 calc(33% - 10px); /* Allow buttons to take up 1/3 of the row on large screens */
+    flex: 1 1 calc(33% - 10px); /* 3 items per row on larger screens */
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 768px) {
     .button-div {
-        flex: 1 1 45%; /* Make buttons take up 45% on smaller screens */
+        flex: 1 1 45%; /* 2 items per row on small screens */
     }
 
     .button-div img {
-        width: 100%; /* Ensure images are responsive */
+        width: 100%; /* Make image fill the button */
+        max-width: 200px; /* Ensure images don't get too big */
         height: auto; /* Maintain aspect ratio */
     }
 
     .button-div h5 {
-        font-size: 14px; /* Adjust font size for better mobile readability */
+        font-size: 16px; /* Adjust text size */
     }
 }
 
 button {
-    width: 100%; /* Make buttons fill the available width */
+    width: 100%; /* Ensure button takes the full width */
     padding: 10px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #ffc107; /* Button color */
+    border: none;
+    border-radius: 5px;
 }
 
 button img {
-    max-width: 50px; /* Ensure images do not get too large */
-    margin-right: 10px;
+    max-width: 200px; /* Control image size */
+    width: auto;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+button h5 {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
 }
