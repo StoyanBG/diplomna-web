@@ -6,7 +6,7 @@
 
 .button-div {
     margin: 1%;
-    max-width: 300px; /* Limit button width for better mobile layout */
+    max-width: 400px; /* Limit button width for better mobile layout */
     flex: 1 1 calc(33% - 10px); /* 3 items per row on larger screens */
     display: flex;
     justify-content: center;
@@ -15,17 +15,17 @@
 
 @media (max-width: 768px) {
     .button-div {
-        flex: 1 1 45%; /* 2 items per row on small screens */
+        flex: 1 1 45%; /* 2 items per row on smaller screens */
     }
 
     .button-div img {
-        width: 100%; /* Make image fill the button */
-        max-width: 200px; /* Ensure images don't get too big */
+        width: 100%; /* Make the image fill the button */
         height: auto; /* Maintain aspect ratio */
+        max-height: 250px; /* Limit the image's height on small screens */
     }
 
     .button-div h5 {
-        font-size: 16px; /* Adjust text size */
+        font-size: 16px; /* Adjust text size for mobile */
     }
 }
 
@@ -39,12 +39,13 @@ button {
     background-color: #ffc107; /* Button color */
     border: none;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 button img {
-    max-width: 200px; /* Control image size */
-    width: auto;
-    height: auto;
+    width: 100%; /* Make image fill the width of the button */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 300px; /* Control image size */
     margin-bottom: 10px;
 }
 
