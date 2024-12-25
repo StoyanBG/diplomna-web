@@ -6,31 +6,32 @@ const busSchedule = ['05:20', '05:35', '05:50', '06:05', '06:20', '06:35', '06:5
     '19:00', '19:30', '19:40', '20:10', '20:35', '21:05'];
 
      // Function to find the next bus
-     function findNextBus() {
-         const userTimeInput = document.getElementById('userTime').value;
+function findNextBus() {
+    const userTimeInput = document.getElementById('userTime').value;
 
-         if (!userTimeInput) {
-             document.getElementById('result').textContent = 'Моля въведете валидно време.';
-             return;
-         }
+    if (!userTimeInput) {
+        document.getElementById('result').textContent = 'Моля въведете валидно време.';
+        return;
+    }
 
-         const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
+    const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
 
-         if (nextBus) {
-             document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
-         } else {
-             document.getElementById('result').textContent = 'Няма повече автобуси днес.';
-         }
-     }
-     var map = L.map('map').setView([42.1354, 24.7453], 13);
+    if (nextBus) {
+        document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
+    } 
+    else {
+        document.getElementById('result').textContent = 'Няма повече автобуси днес.';
+    }
+}
+var map = L.map('map').setView([42.1354, 24.7453], 13);
 
-     // Add the OpenStreetMap tile layer
-     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-     }).addTo(map);
+// Add the OpenStreetMap tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-     // Define the bus route (example coordinates)
-     var busRoute = [
+// Define the bus route (example coordinates)
+var busRoute = [
    [42.16640201657257, 24.75101593211135, 0],
    [42.16598126564745, 24.75073852630776, 0],
    [42.16330772696295, 24.74829790318078, 0],
@@ -105,29 +106,3 @@ const busSchedule = ['05:20', '05:35', '05:50', '06:05', '06:20', '06:35', '06:5
    [42.16705162474862, 24.75138821068929, 0],
    [42.16640201657257, 24.75101593211135, 0]
 ];
-
-
-
-     // Create a polyline for the bus route and add it to the map
-     L.polyline(busRoute, {color: 'red'}).addTo(map);
-     document.getElementById('main-page-button').addEventListener('click', function(event) {
-           event.preventDefault(); // Prevent the default anchor click behavior
-
-           // Check authentication status
-           fetch('/check-auth')
-               .then(response => response.json())
-               .then(data => {
-                   if (data.isAuthenticated) {
-                       // Redirect to success.html if authenticated
-                       window.location.href = '/cl.html';
-                   } else {
-                       // Redirect to login.html if not authenticated
-                       window.location.href = '/login.html';
-                   }
-               })
-               .catch(error => {
-                   console.error('Error checking authentication:', error);
-                   // Handle error, maybe redirect to login or show a message
-                   window.location.href = '/login.html';
-               });
-       });

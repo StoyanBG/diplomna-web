@@ -38,7 +38,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         sessionStorage.setItem('token', data.token); // Assuming the token is returned from the server
 
         // Redirect to allLines.html after successful registration
-        window.location.href = '../allLines.html';
+        window.location.href = '../all-lines.html';
     })
     .catch(error => {
         alert(error.message); // Show error message to the user
