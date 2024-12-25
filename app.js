@@ -121,15 +121,15 @@ app.post('/admin-login', async (req, res) => {
     // Admin authentication
     const admin = await getUserByEmail(email);
 
-    if (!admin) return res.status(404).json({ error: 'Admin not found' });
+    if (!admin) return res.status(404).json({ error: 'Не успешно намиране на администратора' });
 
     // Assuming the admin password is also stored in the Supabase database
-    if (admin.password !== password) return res.status(400).json({ error: 'Invalid admin credentials' });
+    if (admin.password !== password) return res.status(400).json({ error: 'Грешни администраторски данни' });
 
     // Generate a JWT token for admin
     const adminToken = jwt.sign({ userId: admin.id, email: admin.email, name: admin.name }, JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ message: 'Admin logged in successfully', token: adminToken });
+    res.json({ message: 'Успешно влизане като администратор', token: adminToken });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -164,10 +164,10 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
 
     if (error) throw error,errorc;
 
-    res.status(200).send('User deleted successfully');
+    res.status(200).send('Успешно изтриване на потребител');
   } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).send('Server error');
+    console.error('Грешка при изтриването на потребител:', error);
+    res.status(500).send('Грешка в сървъра');
   }
 });
 
@@ -232,7 +232,7 @@ app.post('/send-news', authenticateToken, async (req, res) => {
 
   // Ensure the user is an admin
   if (req.user.email !== 'admin@admin.com') {
-    return res.status(403).json({ error: 'You are not authorized to post news' });
+    return res.status(403).json({ error: 'Нямате право да изпращате новини' });
   }
 
   try {
@@ -242,9 +242,9 @@ app.post('/send-news', authenticateToken, async (req, res) => {
 
     if (error) throw error;
 
-    res.status(200).json({ message: 'News posted successfully' });
+    res.status(200).json({ message: 'Успешно изпращане на новини' });
   } catch (error) {
-    console.error('Error posting news:', error);
+    console.error('Грешка при изпращането на новини:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -257,13 +257,13 @@ app.get('/get-news', async (req, res) => {
           .order('created_at', { ascending: false });
 
       if (error) {
-          return res.status(500).json({ message: 'Failed to fetch news' });
+          return res.status(500).json({ message: 'Грешка при извличане на новини' });
       }
 
       res.json({ news });
   } catch (error) {
-      console.error('Error fetching news:', error);
-      res.status(500).json({ message: 'Error fetching news' });
+      console.error('Грешка при извличане на новини:', error);
+      res.status(500).json({ message: 'Грешка при извличане на новини' });
   }
 });
 app.delete('/delete-news/:id', async (req, res) => {
@@ -276,13 +276,13 @@ app.delete('/delete-news/:id', async (req, res) => {
       .eq('id', id);
 
     if (error) {
-      return res.status(500).json({ message: 'Failed to delete news' });
+      return res.status(500).json({ message: 'Неуспешно изтриване на новини' });
     }
 
-    res.status(200).json({ message: 'News deleted successfully!' });
+    res.status(200).json({ message: 'Успешно изтриване на новини!' });
   } catch (error) {
-    console.error('Error deleting news:', error);
-    res.status(500).json({ message: 'Error deleting news' });
+    console.error('Грешка при изтриването на новини', error);
+    res.status(500).json({ message: 'Грешка при изтриването на новини' });
   }
 });
 
@@ -402,10 +402,10 @@ app.post('/respond-message', authenticateToken, async (req, res) => {
 
     if (error) throw error;
 
-    res.status(200).send('Response sent successfully');
+    res.status(200).send('Успешно изпращане на отговор');
   } catch (error) {
-    console.error('Error responding to message:', error);
-    res.status(500).send('Server error');
+    console.error('Грешка при отговаряне на новина:', error);
+    res.status(500).send('Сърварна грешка');
   }
 });
 

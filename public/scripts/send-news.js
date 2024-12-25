@@ -20,13 +20,13 @@ document.getElementById('send-news-form').addEventListener('submit', async funct
       const data = await response.json();
   
       if (response.ok) {
-        alert('News sent successfully!');
+        alert('Успешно изпращане на новини!');
         document.getElementById('send-news-form').reset();
       } else {
-        alert('Failed to send news: ' + data.message);
+        alert('Неуспешно изпращане на новини: ' + data.message);
       }
     } catch (error) {
-      console.error('Error sending news:', error);
-      alert('Error sending news. Please try again.');
+      console.error('Грешка при изпращане на новини:', error);
+      alert('Грешка при изпращане на новини. Моля пробвайте пак.');
     }
   });

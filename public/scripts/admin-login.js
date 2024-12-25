@@ -28,6 +28,6 @@ adminLoginForm.addEventListener('submit', async (event) => {
       alert(result.error);
     }
   } catch (error) {
-    console.error('Admin login error:', error);
+    console.error('Грешка при влизането:', error);
   }
 });

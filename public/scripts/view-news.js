@@ -20,18 +20,18 @@ document.addEventListener('DOMContentLoaded', async function() {
                     
                         <h3>${newsItem.title}</h3>
                         <p>${newsItem.content}</p>
-                        <small>Published on: ${new Date(newsItem.created_at).toLocaleDateString()}</small>
+                        <small>Публикувано на: ${new Date(newsItem.created_at).toLocaleDateString()}</small>
                     `;
                     newsList.appendChild(listItem);
                 });
             } else {
-                newsList.innerHTML = '<li>No news available.</li>';
+                newsList.innerHTML = '<li>Няма налични новини.</li>';
             }
         } else {
-            alert('Failed to load news: ' + data.message);
+            alert('Неуспешно зареждане на новини: ' + data.message);
         }
     } catch (error) {
-        console.error('Error fetching news:', error);
-        alert('Error fetching news. Please try again.');
+        console.error('Неуспешно извличане на новини:', error);
+        alert('Неуспешно извличане на новини. Моля пробвайте пак.');
     }
 });

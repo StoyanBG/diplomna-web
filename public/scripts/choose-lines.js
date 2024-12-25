@@ -26,7 +26,7 @@ function saveChoice() {
     
     // Check if the user has selected any lines
     if (chosenLines.length === 0) {
-        alert('Please select at least one line.');
+        alert('Моля изберете поне една линия.');
         return; // Exit the function if no lines are selected
     }
   
@@ -42,7 +42,7 @@ function saveChoice() {
     .then(response => {
         if (response.ok) {
             // If successful, redirect to fl.html
-            window.location.href = '../fl.html'; // Adjusted the path to work with Vercel
+            window.location.href = '../favourite-lines.html'; // Adjusted the path to work with Vercel
         }
 
         else if ((!token)) {

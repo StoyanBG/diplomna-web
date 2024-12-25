@@ -10,16 +10,16 @@ const busSchedule = ["05:30", "05:44", "05:58", "06:12", "06:24", "06:40",'06:52
         const userTimeInput = document.getElementById('userTime').value;
 
         if (!userTimeInput) {
-            document.getElementById('result').textContent = 'Please enter a valid time.';
+            document.getElementById('result').textContent = 'Моля въведете валидно време.';
             return;
         }
 
         const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
 
         if (nextBus) {
-            document.getElementById('result').textContent = `The next bus is at ${nextBus}.`;
+            document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
         } else {
-            document.getElementById('result').textContent = 'No more buses today.';
+            document.getElementById('result').textContent = 'Няма повече автобуси днес.';
         }
     }
     var map = L.map('map').setView([42.1354, 24.7453], 13);
@@ -138,7 +138,7 @@ const busSchedule = ["05:30", "05:44", "05:58", "06:12", "06:24", "06:40",'06:52
               .then(data => {
                   if (data.isAuthenticated) {
                       // Redirect to success.html if authenticated
-                      window.location.href = '/cl.html';
+                      window.location.href = '/choose-lines.html';
                   } else {
                       // Redirect to login.html if not authenticated
                       window.location.href = '/login.html';

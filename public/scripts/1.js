@@ -12,7 +12,7 @@ function findNextBus() {
     const userTimeInput = document.getElementById('userTime').value;
 
     if (!userTimeInput) {
-        document.getElementById('result').textContent = 'Please enter a valid time.';
+        document.getElementById('result').textContent = 'Моля въведете валидно време.';
         return;
     }
     const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);

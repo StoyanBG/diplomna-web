@@ -17,7 +17,7 @@ deleteUserForm.addEventListener('submit', async (event) => {
     });
 
     if (response.ok) {
-      alert('User deleted successfully');
+      alert('Успешно изтрит потребител');
       fetchUserList();
     } else {
       alert('Failed to delete user');

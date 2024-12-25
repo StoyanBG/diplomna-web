@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             newsItem.className = 'news-item';
             newsItem.innerHTML = `
               <div>${news.title}</div>
-              <button class="delete-btn" data-id="${news.id}">Delete</button>
+              <button class="delete-btn" data-id="${news.id}">Изтриване</button>
             `;
             newsListElement.appendChild(newsItem);
           });
