@@ -26,18 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // JWT secret from environment variable
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Helper function for interacting with Supabase
-async function getUserByEmail(email) {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email)
-    .single();
-
-  if (error) throw error;
-  return data;
-}
-
 // Route for user registration
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
@@ -92,6 +80,33 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Middleware to verify JWT token
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
+
+  if (!token) return res.sendStatus(401); // No token provided
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403); // Invalid token
+    req.user = user; // Attach user info to the request object
+    next();
+  });
+}
+
+// Helper function for interacting with Supabase
+async function getUserByEmail(email) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', email)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
 // Initialize a default admin user if not already present
 (async () => {
   const defaultAdminEmail = 'admin@admin.com';
@@ -114,6 +129,7 @@ app.post('/login', async (req, res) => {
     if (insertError) throw insertError;
   }
 })();
+
 app.post('/admin-login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -134,6 +150,7 @@ app.post('/admin-login', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 app.get('/users', authenticateToken, async (req, res) => {
   try {
     const { data: users, error } = await supabase
@@ -147,6 +164,7 @@ app.get('/users', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Route for deleting a user
 app.post('/delete-user', authenticateToken, async (req, res) => {
   const { userId } = req.body;
@@ -170,62 +188,6 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
     res.status(500).send('Грешка в сървъра');
   }
 });
-
-// Middleware to verify JWT token
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
-
-  if (!token) return res.sendStatus(401); // No token provided
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403); // Invalid token
-    req.user = user; // Attach user info to the request object
-    next();
-  });
-}
-
-// Route for saving user choices
-app.post('/save-choice', authenticateToken, async (req, res) => {
-  const { lineIds } = req.body;
-  const userId = req.user.userId;
-
-  try {
-    const { error } = await supabase
-      .from('choices')
-      .insert(lineIds.map(lineId => ({
-        user_id: userId,
-        line_id: lineId,
-        created_at: new Date().toISOString(),
-      })));
-
-    if (error) throw error;
-
-    res.sendStatus(200);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Route for fetching selected lines
-app.get('/selected-lines', authenticateToken, async (req, res) => {
-  const userId = req.user.userId;
-
-  try {
-    const { data: choices, error } = await supabase
-      .from('choices')
-      .select('line_id')
-      .eq('user_id', userId);
-
-    if (error) throw error;
-
-    const lineIds = choices.map(choice => choice.line_id);
-    res.json(lineIds);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // Route for posting news (only accessible by admin)
 app.post('/send-news', authenticateToken, async (req, res) => {
   const { title, content } = req.body;
@@ -266,6 +228,7 @@ app.get('/get-news', async (req, res) => {
       res.status(500).json({ message: 'Грешка при извличане на новини' });
   }
 });
+
 app.delete('/delete-news/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -283,6 +246,47 @@ app.delete('/delete-news/:id', async (req, res) => {
   } catch (error) {
     console.error('Грешка при изтриването на новини', error);
     res.status(500).json({ message: 'Грешка при изтриването на новини' });
+  }
+});
+
+// Route for saving user choices
+app.post('/save-choice', authenticateToken, async (req, res) => {
+  const { lineIds } = req.body;
+  const userId = req.user.userId;
+
+  try {
+    const { error } = await supabase
+      .from('choices')
+      .insert(lineIds.map(lineId => ({
+        user_id: userId,
+        line_id: lineId,
+        created_at: new Date().toISOString(),
+      })));
+
+    if (error) throw error;
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route for fetching selected lines
+app.get('/selected-lines', authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const { data: choices, error } = await supabase
+      .from('choices')
+      .select('line_id')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+
+    const lineIds = choices.map(choice => choice.line_id);
+    res.json(lineIds);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -334,8 +338,6 @@ app.get('/get-complaints', async (req, res) => {
   }
 });
 
-
-
 // Route for sending a message
 app.post('/send-message', authenticateToken, async (req, res) => { 
   const { subject, message } = req.body;
@@ -369,9 +371,6 @@ app.post('/send-message', authenticateToken, async (req, res) => {
     res.status(500).send('Server error'); // General server error
   }
 });
-
-
-
 
 // Route for responding to a message
 app.post('/respond-message', authenticateToken, async (req, res) => {
