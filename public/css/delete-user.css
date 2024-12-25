@@ -58,12 +58,12 @@ button.warn {
 button.warn:hover {
     background-color: #c82333;
 }
-
-button.btn-primary {
-    background-color: #007bff;
+button.back-btn{
+    text-decoration: none;
+    background-color: #007bff;;
+    color: white;
 }
-
-button.btn-primary:hover {
+button.back-btn:hover{
     background-color: #0056b3;
 }
 
