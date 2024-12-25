@@ -10,7 +10,7 @@ select {
 main {
   text-align: center; /* Centers the button inside the main section */
 }
-button {
+.button-sub {
   display: inline-block; /* Make sure the button is treated as an inline element */
   margin: 20px auto; /* Adds margin to the top and bottom, centers the button */
   padding: 10px 20px;
