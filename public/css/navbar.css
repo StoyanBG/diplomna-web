@@ -121,4 +121,7 @@ nav {
 .menu > .menu-item:hover .hamburger::after {
     background-color: white;
 }
+h4{
+    font-weight: bold;
+}
 
