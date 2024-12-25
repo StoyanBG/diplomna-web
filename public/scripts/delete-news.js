@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
           });
         } else {
-          newsListElement.innerHTML = '<p>No news available to delete.</p>';
+          newsListElement.innerHTML = '<p>Няма новини за изтриване</p>';
         }
       } else {
         alert('Failed to fetch news: ' + data.message);
