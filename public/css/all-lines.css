@@ -8,6 +8,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
+}
+.button-div h5{
+    color: #333;
 }
 @media (max-width: 768px) {
     .button-div {
@@ -46,6 +50,6 @@ button img {
 
 button h5 {
     font-size: 20px; /* Increase text size */
-    color: #333;
+    color: white;
     text-align: center;
 }

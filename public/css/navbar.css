@@ -118,17 +118,3 @@ nav {
     background-color: white;
 }
 
-/* Button styling */
-.nav-button {
-    padding: 10px 20px;
-    background-color: #c8a56b;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav-button:hover {
-    background-color: #b08f60;
-}
