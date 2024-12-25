@@ -32,5 +32,10 @@ body {
   height: 500px;
   width: 95%;
   margin-left: 2.5%;
-  
+  margin-bottom: 2vh;
+}
+.container {
+  flex: 1; /* Pushes the footer down if there's not enough content */
+  display: flex;
+  flex-direction:inherit;
 }

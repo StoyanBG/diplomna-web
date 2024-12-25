@@ -10,16 +10,16 @@
           const userTimeInput = document.getElementById('userTime').value;
 
           if (!userTimeInput) {
-              document.getElementById('result').textContent = 'Please enter a valid time.';
+              document.getElementById('result').textContent = 'Моля въведете валидно време.';
               return;
           }
 
           const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
 
           if (nextBus) {
-              document.getElementById('result').textContent = `The next bus is at ${nextBus}.`;
+              document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
           } else {
-              document.getElementById('result').textContent = 'No more buses today.';
+              document.getElementById('result').textContent = 'Няма повече автобуси днес.';
           }
       }
       var map = L.map('map').setView([42.1354, 24.7453], 13);
