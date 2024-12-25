@@ -7,9 +7,13 @@ select {
   width: 100%;
   height: 200px;
 }
+main {
+  text-align: center; /* Centers the button inside the main section */
+}
 button {
-  display: block;
-  margin: 10px auto;
+  display: inline-block; /* Make sure the button is treated as an inline element */
+  margin: 20px auto; /* Adds margin to the top and bottom, centers the button */
+  padding: 10px 20px;
 }
 legend {
   display: block; /* Ensure the legend takes up the full width */
