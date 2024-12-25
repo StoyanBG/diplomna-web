@@ -32,7 +32,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         sessionStorage.setItem('token', data.token);
 
         // Redirect to fl.html after successful login
-        window.location.href = '../fl.html';
+        window.location.href = '../favourite-lines.html';
     })
     .catch(error => {
         alert(error.message); // Display an error message to the user

@@ -152,7 +152,7 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const { error1 } = await supabase
+    const { errorc } = await supabase
       .from('choices')
       .delete()
       .eq('user_id', userId);
@@ -162,7 +162,7 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
       .delete()
       .eq('id', userId)
 
-    if (error) throw error,error1;
+    if (error) throw error,errorc;
 
     res.status(200).send('User deleted successfully');
   } catch (error) {
