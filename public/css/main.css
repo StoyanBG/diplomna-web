@@ -14,6 +14,7 @@ main {
     flex: 1; /* This pushes the footer to the bottom */
 }
 hr{
+    background-color: white;
     opacity: 1;
 }
 
