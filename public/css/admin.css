@@ -109,6 +109,16 @@ a:hover{
   .back-btn:hover {
     background-color: #0056b3;
   }
+  .back-btnl {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .back-btnl:hover {
+    background-color: #0056b3;
+  }
   /* Responsive adjustments */
   @media (max-width: 600px) {
     .login-container, .dashboard-container {
