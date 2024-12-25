@@ -1,6 +1,7 @@
-body{
+body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
 /* Header Styles */
 header {
     background-color: black;
@@ -13,7 +14,7 @@ header {
 a {
     text-decoration: none;
     color: white;
-    text-align:center;
+    text-align: center;
 }
 
 /* Navigation Links */
@@ -21,12 +22,10 @@ a {
     background-color: #333;
     list-style: none;
     display: flex;
-    justify-content: flex-start; /* Align links to the left */
+    justify-content: center; /* Center the links on desktop */
     gap: 1rem; /* Add horizontal spacing between links */
     margin: 0;
-    padding: 0;
-    padding-left: 1rem; /* Add some space to visually align under the centered text */
-    padding: 0.7rem 0.7rem;
+    padding: 0.7rem;
     border: 2px solid transparent;
     border-radius: 5px;
 }
@@ -67,11 +66,12 @@ a {
 .hamburger:hover {
     transform: scale(1.1);
 }
-.logo{
-    
+
+.logo {
     text-align: center; /* Center the logo text */
     margin-bottom: 1rem; /* Add spacing below the logo */
 }
+
 /* Logo */
 .logo h1 {
     font-weight: bold;
@@ -80,17 +80,16 @@ a {
     margin: 0; /* Remove margins */
 }
 
-
 /* Mobile Styles */
 @media (max-width: 768px) {
     header {
-        justify-content: flex-start; /* Align hamburger and logo to the left */
+        display: flex;
+        justify-content: space-between; /* Align hamburger and logo to the left and right */
         gap: 1rem; /* Add space between the logo and hamburger */
     }
 
     .hamburger {
         display: block; /* Show hamburger button on mobile */
-        order: -1; /* Position hamburger to the left of the logo */
     }
 
     .nav-links {
@@ -100,11 +99,10 @@ a {
         position: absolute;
         top: 100%;
         left: 0; /* Align dropdown to the left */
-        width: 92%; /* Full width dropdown menu */
+        width: 100%; /* Full width dropdown menu */
         padding: 1rem;
         box-shadow: 4px 0 6px rgba(0, 0, 0, 0.2);
         border-radius: 0 0 8px 8px;
-        
     }
 
     .nav-links.active {
@@ -112,7 +110,7 @@ a {
     }
 
     .nav-links li {
-        margin: 5% 0; /* Add vertical spacing between buttons */
+        margin: 3% 0; /* Add vertical spacing between buttons */
     }
 
     .nav-links a {

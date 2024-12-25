@@ -13,6 +13,9 @@ body {
 main {
     flex: 1; /* This pushes the footer to the bottom */
 }
+hr{
+    opacity: 1;
+}
 
 /* Footer styles */
 footer {
@@ -26,19 +29,31 @@ footer {
 .footer-links {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Allows the links to wrap */
+    justify-content: center; /* Centers the links */
+    margin-right: 10px ;
 }
 
 .footer-links li {
     display: inline;
     margin: 0 10px;
 }
-
+@media (max-width: 600px) {
+    .footer-links li {
+        display: block; /* Stack the list items vertically */
+        margin-top: 10px;/* Adjust vertical spacing */
+        margin-right: 10px ;
+    }
+}
 .footer-links a {
     color: white;
     text-decoration: none;
     transition: color 0.3s;
+
 }
 
 .footer-links a:hover {
     color: grey;
 }
+
