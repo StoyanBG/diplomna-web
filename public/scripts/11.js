@@ -7,27 +7,27 @@
 
       // Function to find the next bus
       function findNextBus() {
-          const userTimeInput = document.getElementById('userTime').value;
+        const userTimeInput = document.getElementById('userTime').value;
 
-          if (!userTimeInput) {
-              document.getElementById('result').textContent = 'Моля въведете валидно време.';
-              return;
-          }
+        if (!userTimeInput) {
+            document.getElementById('result').textContent = 'Моля въведете валидно време.';
+            return;
+        }
 
-          const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
+        const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
 
-          if (nextBus) {
-              document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
-          } else {
-              document.getElementById('result').textContent = 'Няма повече автобуси днес.';
-          }
-      }
-      var map = L.map('map').setView([42.1354, 24.7453], 13);
+        if (nextBus) {
+            document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
+        } else {
+            document.getElementById('result').textContent = 'Няма повече автобуси днес.';
+        }
+    }
+    var map = L.map('map').setView([42.1354, 24.7453], 13);
 
-      // Add the OpenStreetMap tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+    // Add the OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
 // Define the bus route (example coordinates)
 var busRoute = [[42.17016432248593,24.72049290262735,0],

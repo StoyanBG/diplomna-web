@@ -7,7 +7,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
 
     // Check if the token exists
     if (!token) {
-        alert('You must be logged in to submit a complaint. Redirecting to login page.');
+        alert('Трябва да сте влезнали за да изпратите оплакване. Препращане към страницата за влизане.');
         window.location.href = '../login.html'; // Redirect to login page if token does not exist
         return; // Exit the function
     }
@@ -33,7 +33,7 @@ document.getElementById('complaintForm').addEventListener('submit', function (e)
         return response.text(); // Parse response as text
     })
     .then(data => {
-        document.getElementById('responseMessage').textContent = 'Complaint sent successfully!'; // Display success message
+        document.getElementById('responseMessage').textContent = 'Успешно изпращане на оплакване'; // Display success message
         document.getElementById('complaintForm').reset(); // Reset form fields
     })
     .catch(error => {

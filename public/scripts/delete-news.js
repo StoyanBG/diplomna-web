@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const newsListElement = document.getElementById('news-list');
   
     if (!token) {
-      alert('You must be logged in as an admin to view this page.');
+      alert('Трябва да сте влезли. Преместване към стрницата за влизане');
       window.location.href = '/admin-login.html'; // Redirect to login page if not logged in
       return;
     }
@@ -42,11 +42,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           newsListElement.innerHTML = '<p>Няма новини за изтриване</p>';
         }
       } else {
-        alert('Failed to fetch news: ' + data.message);
+        alert('Неуспешно извличане на новини: ' + data.message);
       }
     } catch (error) {
-      console.error('Error fetching news:', error);
-      alert('Error fetching news. Please try again.');
+      console.error('Неуспешно извличане на новини:', error);
+      alert('Неуспешно извличане на новини. Пробвайте пак.');
     }
   });
   
@@ -64,13 +64,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = await response.json();
   
       if (response.ok) {
-        alert('News deleted successfully!');
+        alert('Успешно изтриване на новини!');
         window.location.reload(); // Refresh the page to update the list
       } else {
-        alert('Failed to delete news: ' + data.message);
+        alert('Неуспешно изтриване на новини! ' + data.message);
       }
     } catch (error) {
-      console.error('Error deleting news:', error);
-      alert('Error deleting news. Please try again.');
+      console.error('Неуспешно изтриване на новини!:', error);
+      alert('Неуспешно изтриване на новини!. Пробвайте пак.');
     }
   }

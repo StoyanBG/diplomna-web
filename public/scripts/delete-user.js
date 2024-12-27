@@ -20,10 +20,10 @@ deleteUserForm.addEventListener('submit', async (event) => {
       alert('Успешно изтрит потребител');
       fetchUserList();
     } else {
-      alert('Failed to delete user');
+      alert('Неуспешно изтриване ан потребител');
     }
   } catch (error) {
-    console.error('Delete user error:', error);
+    console.error('Имаше грешка при изтриване на потребителя:', error);
   }
 });
 
@@ -41,10 +41,10 @@ async function fetchUserList() {
     if (response.ok) {
       userList.innerHTML = users.map(user => `<p>${user.id}: ${user.name} (${user.email})</p>`).join('');
     } else {
-      alert('Failed to fetch users');
+      alert('Неуспешно извличане на новини');
     }
   } catch (error) {
-    console.error('Fetch users error:', error);
+    console.error('Грешка при извличане на новини:', error);
   }
 }
 

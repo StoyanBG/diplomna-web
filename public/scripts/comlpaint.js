@@ -4,12 +4,12 @@ function fetchComplaints() {
     fetch('/get-complaints', { method: 'GET' })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch complaints');
+                throw new Error('Неуспешно зареждане на оплаквания');
             }
             return response.json();
         })
         .then(complaints => {
-            console.log('Fetched complaints:', complaints);
+            console.log('Извлечени оплаквания:', complaints);
             const complaintsList = document.getElementById('complaintsList');
             complaintsList.innerHTML = ''; // Clear existing content
             
@@ -33,7 +33,7 @@ function fetchComplaints() {
                 complaintsList.appendChild(li);
             });
         })
-        .catch(error => console.error('Error fetching complaints:', error));
+        .catch(error => console.error('Грешка при извличане на оплаквания:', error));
 }
 
 // Show response form and set the message ID
@@ -59,7 +59,7 @@ document.getElementById('responseForm').addEventListener('submit', function (e) 
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to respond to message');
+            throw new Error('Неуспешно отговаряне на съобщението');
         }
         return response.text();
     })
@@ -80,7 +80,7 @@ function redirectToComplaintPage() {
     if (token) {
         window.location.href = '../service.html';
     } else {
-        alert('You must be logged in to submit a complaint. Redirecting to login page.');
+        alert('Трябва да сте влезнали за да изпратите оплакване. Преместване към страницата за влизане.');
         window.location.href = '../login.html';
     }
 }

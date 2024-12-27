@@ -54,8 +54,8 @@ function fetchSelectedLines() {
         }
     })
     .catch(error => {
-        console.error('Error fetching selected lines:', error);
-        alert('Could not load selected lines. Please try again later.'); // User-friendly message
+        console.error('Прешка при извличане на новини:', error);
+        alert('Прешка при извличане на новини. Моля пробвайте пак по-късно.'); // User-friendly message
     });
 }
 

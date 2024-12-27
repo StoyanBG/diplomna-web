@@ -4,12 +4,12 @@ function sendFeedback() {
 
     // Validate email and message
     if (!userEmail || !message) {
-        alert('Please provide both an email and a message.');
+        alert('Моля дайте е-майл и съобщение');
         return;
     }
 
-    const subject = encodeURIComponent('Web App Feedback');
-    const body = encodeURIComponent(`From: ${userEmail}\n\n${message}`);
+    const subject = encodeURIComponent('обратна връзка за Web-приложение');
+    const body = encodeURIComponent(`От: ${userEmail}\n\n${message}`);
     
     // Construct the Gmail URL
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=stoyankanev01@gmail.com&su=${subject}&body=${body}`;

@@ -46,16 +46,16 @@ function saveChoice() {
         }
 
         else if ((!token)) {
-            alert('You must be logged in to choose a favourite line. Redirecting to login page.');
+            alert('Трябва да сте взлезнали за да може да изберете любими линии. Препращане към страницата за влизане.');
             window.location.href = '../login.html'; // Adjust this based on your app structure
         }
          else {
             window.location.href = '../login.html';
-            throw new Error('There was a mistake saving your choices');
+            throw new Error('Грешка при запазване на избора');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was an issue saving your choices. Please try again.'); // User-friendly error message
+        alert('Грешка при запазване на избора. Моля пробвайте пак'); // User-friendly error message
     });
 }

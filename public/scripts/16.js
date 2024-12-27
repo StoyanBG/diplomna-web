@@ -5,31 +5,31 @@ const busSchedule = ["05:15", "05:45", '06:15', '06:30', '06:45', '07:00', '07:1
     '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45', 
     '16:00', '16:15', '16:30', '16:45', '17:00', '17:25',"17:40","18:20","18:50","19:35","20:00,","20:45"];
 
-     // Function to find the next bus
-     function findNextBus() {
-         const userTimeInput = document.getElementById('userTime').value;
+    // Function to find the next bus
+    function findNextBus() {
+        const userTimeInput = document.getElementById('userTime').value;
 
-         if (!userTimeInput) {
-             document.getElementById('result').textContent = 'Моля въведете валидно време.';
-             return;
-         }
+        if (!userTimeInput) {
+            document.getElementById('result').textContent = 'Моля въведете валидно време.';
+            return;
+        }
 
-         const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
+        const nextBus = busSchedule.find(busTime => busTime >= userTimeInput);
 
-         if (nextBus) {
-             document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
-         } else {
-             document.getElementById('result').textContent = 'Няма повече автобуси днес.';
-         }
-     }
-     var map = L.map('map').setView([42.1354, 24.7453], 13);
+        if (nextBus) {
+            document.getElementById('result').textContent = `Следващия автобус е в ${nextBus}.`;
+        } else {
+            document.getElementById('result').textContent = 'Няма повече автобуси днес.';
+        }
+    }
+    var map = L.map('map').setView([42.1354, 24.7453], 13);
 
-     // Add the OpenStreetMap tile layer
-     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Add the OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-     }).addTo(map);
+    }).addTo(map);
 
-     // Define the bus route (example coordinates)
+    // Define the bus route (example coordinates)
 var busRoute = [
     [42.16247359637361, 24.75823848422519],
     [42.16277486893667, 24.75694006618063],
@@ -84,7 +84,5 @@ var busRoute = [
     [42.16213329216057, 24.75952067689745],
     [42.16247359637361, 24.75823848422519]
 ];
-
-
-     // Create a polyline for the bus route and add it to the map
-     L.polyline(busRoute, {color: 'red'}).addTo(map);
+// Create a polyline for the bus route and add it to the map
+L.polyline(busRoute, {color: 'red'}).addTo(map);
