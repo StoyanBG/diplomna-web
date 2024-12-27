@@ -99,9 +99,8 @@ var busRoute = [[42.15678989982429,24.76978148366382,0],
     [42.15741190822771,24.77144003592377,0],
     [42.15681293627688,24.77042230389927,0],
     [42.15688873772309,24.76998841223642,0],
-    [42.15678989982429,24.76978148366382,0]
-];
+    [42.15678989982429,24.76978148366382,0]];
 
 
-    // Create a polyline for the bus route and add it to the map
-    L.polyline(busRoute, {color: 'red'}).addTo(map);
+// Create a polyline for the bus route and add it to the map
+L.polyline(busRoute, {color: 'red'}).addTo(map);
