@@ -39,7 +39,7 @@ app.post('/register', async (req, res) => {
       .single();
 
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ error: 'Потребителя вече съществува' });
     }
 
     // Insert the new user into the Supabase database
@@ -54,7 +54,7 @@ app.post('/register', async (req, res) => {
     // Generate a JWT token
     const token = jwt.sign({ userId: newUser.id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: '1h' });
 
-    res.json({ message: 'User registered successfully', token });
+    res.json({ message: 'Успешно регистриране на потребителя', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -67,15 +67,15 @@ app.post('/login', async (req, res) => {
   try {
     const user = await getUserByEmail(email);
 
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) return res.status(404).json({ error: 'Потребителя не е намерен' });
 
     // Check if the password matches
-    if (user.password !== password) return res.status(400).json({ error: 'Invalid credentials' });
+    if (user.password !== password) return res.status(400).json({ error: 'Неправилни данни' });
 
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '1h' });
     
-    res.json({ message: 'User logged in successfully', token });
+    res.json({ message: 'Потребителя влезе успешно', token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -345,7 +345,7 @@ app.post('/send-message', authenticateToken, async (req, res) => {
 
   // Check if the sender's name is available
   if (!senderName) {
-    return res.status(400).send('Sender name not provided'); // Handle case where sender name is not available
+    return res.status(400).send('Не е дадено име на изпращача'); // Handle case where sender name is not available
   }
 
   try {
@@ -361,14 +361,14 @@ app.post('/send-message', authenticateToken, async (req, res) => {
       });
 
     if (insertError) {
-      console.error('Error inserting message:', insertError); // Log error for debugging
-      return res.status(500).send('Failed to send message'); // Handle insert error
+      console.error('Грешка при вкарване на съобшението:', insertError); // Log error for debugging
+      return res.status(500).send('Неуспешно изпращане на съобщението'); // Handle insert error
     }
 
-    res.status(200).send('Message sent successfully'); // Success response
+    res.status(200).send('Успешно изпращане на съобщението'); // Success response
   } catch (error) {
-    console.error('Error sending message:', error); // Log error for debugging
-    res.status(500).send('Server error'); // General server error
+    console.error('Грешка при изпращане на съобшението::', error); // Log error for debugging
+    res.status(500).send('Сървърна грешка'); // General server error
   }
 });
 
