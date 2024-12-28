@@ -11,6 +11,7 @@ select {
   height: 200px;
 }
 main {
+  margin-top: 2vh ;
   text-align: center; /* Centers the button inside the main section */
 }
 .button-sub {
