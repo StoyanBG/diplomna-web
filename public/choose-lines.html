@@ -20,12 +20,11 @@
               </a>
               <ul class="submenu">
                 <li class="menu-item"><a href="/all-lines.html" ><h6>Всички линии</h6></a></li>
-                  <li class="menu-item"id="main-page-button"><a href="/choose-lines.html" ><h6>Избор на любими линии</h6></a></li>
-                  <li class="menu-item"><a href="/favourite-lines.html" ><h6>Любими линии</h6></a></li>
-                  <li class="menu-item">
-                    <a href="/feedback.html"><h6>Изпратете отзив</h6></a>
-                  </li>
-                  <li class="menu-item"><a href="/complaint.html" ><h6>Сегашни проблеми</h6></a></li>
+                <li class="menu-item"id="main-page-button"><a href="/choose-lines.html" ><h6>Избор на любими линии</h6></a></li>
+                <li class="menu-item"><a href="/favourite-lines.html" ><h6>Любими линии</h6></a></li>
+                <li class="menu-item"><a href="/feedback.html"><h6>Изпратете отзив</h6></a></li>
+                <li class="menu-item"><a href="/service.html" ><h6>Съобщете за проблем</h6></a></li>
+                <li class="menu-item"><a href="/complaint.html" ><h6>Сегашни проблеми</h6></a></li>
               </ul>
           </li>
       </ul>
@@ -38,26 +37,25 @@
         <a href="/index.html"><button type="button" class="btn btn-primary"><h5>Изход</h5></button> </a>
       </span>
     </div>
-</nav>
-<br>
-<main>
-  <form id="lineForm" action="/save-choice" method="POST">
-    <fieldset>
-      <legend>Изберете любими линии:</legend>
+  </nav>
+  <main>
+    <form id="lineForm" action="/save-choice" method="POST">
+      <fieldset>
+        <legend>Изберете любими линии:</legend>
+        <br>
+        <br>
+        <label><input type="checkbox" name="line" value="1" id="l1"> линия 1</label><br>
+        <label><input type="checkbox" name="line" value="7" id="l7"> линия 7</label><br>
+        <label><input type="checkbox" name="line" value="9" id="l9"> линия 9</label><br>
+        <label><input type="checkbox" name="line" value="11" id="l11"> линия 11</label><br>
+        <label><input type="checkbox" name="line" value="16" id="l16"> линия 16</label><br>
+        <label><input type="checkbox" name="line" value="27" id="l27"> линия 27</label><br>
+        <label><input type="checkbox" name="line" value="36" id="l36"> линия 36</label><br>
+      </fieldset>
       <br>
-      <br>
-      <label><input type="checkbox" name="line" value="1" id="l1"> линия 1</label><br>
-      <label><input type="checkbox" name="line" value="7" id="l7"> линия 7</label><br>
-      <label><input type="checkbox" name="line" value="9" id="l9"> линия 9</label><br>
-      <label><input type="checkbox" name="line" value="11" id="l11"> линия 11</label><br>
-      <label><input type="checkbox" name="line" value="16" id="l16"> линия 16</label><br>
-      <label><input type="checkbox" name="line" value="27" id="l27"> линия 27</label><br>
-      <label><input type="checkbox" name="line" value="36" id="l36"> линия 36</label><br>
-    </fieldset>
-    <br>
-    <button type="button" class="btn btn-primary button-sub" onclick="saveChoice()"><h6>Потвърждение</h6></button>
-  </form>
-</main>
+      <button type="button" class="btn btn-primary button-sub" onclick="saveChoice()"><h6>Потвърждение</h6></button>
+    </form>
+  </main>
   <footer>
     <ul class="footer-links">
         <li><a href="/privacy.html">Политика за поверителност</a></li>

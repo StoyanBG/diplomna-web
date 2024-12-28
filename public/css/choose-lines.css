@@ -3,6 +3,9 @@ label {
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
 }
+input{
+  margin-right: 0.5vh;
+}
 select {
   width: 100%;
   height: 200px;
