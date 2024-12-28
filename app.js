@@ -140,9 +140,9 @@ app.post('/admin-login', async (req, res) => {
     //}
 
     // Admin authentication
-    const admin = await getUserByEmail(email);
+    const admin = await getUserByEmail("admin@admin.com");
 
-    if (admin != "admin@admin.com") return res.status(404).json({ error: 'Не успешно намиране на администратора' });
+    if (!admin) return res.status(404).json({ error: 'Не успешно намиране на администратора' });
 
     // Assuming the admin password is also stored in the Supabase database
     if (admin.password !== password) return res.status(400).json({ error: 'Грешни администраторски данни' });
