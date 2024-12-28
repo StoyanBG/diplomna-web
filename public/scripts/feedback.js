@@ -18,75 +18,34 @@ function sendFeedback() {
     // Open the Gmail URL in a new tab
     window.open(gmailUrl, '_blank');
 }
-function checkAuthAllLines(){
+function checkAuth(page) {
     const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        // If token doesn't exist, redirect to login page
+    if (token) {
+        window.location.href = page;
+    } else {
         alert("За да достъпите другата част от сайта трябва да сте влезли");
         window.location.href = 'login.html';
-        return;
-        
     }
-    else{
-        window.location.href = 'all-lines.html';
-        return;
-    }    
 }
-function checkAuthChooseLines(){
-    const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        // If token doesn't exist, redirect to login page
-        alert("За да достъпите другата част от сайта трябва да сте влезли");
-        window.location.href = 'login.html';
-        return;
-    }
-    else{
-        window.location.href = 'choose-lines.html';
-        return;
-    }  
+function checkAuthAllLines() {
+    checkAuth('all-lines.html');
 }
-function checkAuthFavouriteLines(){
-    const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        // If token doesn't exist, redirect to login page
-        alert("За да достъпите другата част от сайта трябва да сте влезли");
-        window.location.href = 'login.html';
-        return;
-    }
-    else{
-        window.location.href = 'favourite-lines.html';
-        return;
-    }  
+function checkAuthChooseLines() {
+    checkAuth('choose-lines.html');
 }
-function checkAuthService(){
-    const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        // If token doesn't exist, redirect to login page
-        alert("За да достъпите другата част от сайта трябва да сте влезли");
-        window.location.href = 'login.html';
-        return;
-    }
-    else{
-        window.location.href = 'service.html';
-        return;
-    }  
+function checkAuthFavouriteLines() {
+    checkAuth('favourite-lines.html');
 }
-function checkAuthComplaint(){
-    const token = sessionStorage.getItem('token');
 
-    if (!token) {
-        // If token doesn't exist, redirect to login page
-        alert("За да достъпите другата част от сайта трябва да сте влезли");
-        window.location.href = 'login.html';
-        return;
-    }
-    else{
-        window.location.href = 'complaint.html';
-        return;
-    }  
+function checkAuthService() {
+    checkAuth('service.html');
+}
+
+function checkAuthComplaint() {
+    checkAuth('complaint.html');
 }
 
