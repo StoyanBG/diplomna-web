@@ -11,7 +11,9 @@ nav {
     display: flex;
     align-items: center;
 }
-
+.nav-left{
+    cursor: pointer;
+}
 .nav-center {
     flex-grow: 1;
     justify-content: center;
