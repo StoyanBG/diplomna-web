@@ -1,4 +1,5 @@
 function sendFeedback() {
+
     const userEmail = document.getElementById('userEmail').value;
     const message = document.getElementById('message').value;
 
@@ -17,10 +18,14 @@ function sendFeedback() {
     // Open the Gmail URL in a new tab
     window.open(gmailUrl, '_blank');
 }
-const token = sessionStorage.getItem('token');
+function checkAuth(){
+    const token = sessionStorage.getItem('token');
 
     if (!token) {
         // If token doesn't exist, redirect to login page
+        alert("За да достъпите другата част от сайта трябва да сте влезли");
         window.location.href = '../login.html';
         return;
+    }
 }
+
