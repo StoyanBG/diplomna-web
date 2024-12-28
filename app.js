@@ -134,10 +134,6 @@ app.post('/admin-login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Ensure only the admin email can log in
-    //if (email !== 'admin@admin.com') {
-      //return res.status(403).json({ error: 'Нямате право да влезете като администратор' });
-    //}
 
     // Admin authentication
     const admin = await getUserByEmail("admin@admin.com");
