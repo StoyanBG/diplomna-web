@@ -24,7 +24,7 @@ const busSchedule = ["05:15", "05:45", '06:15', '06:30', '06:45', '07:00', '07:1
     }
     var map = L.map('map').setView([42.1354, 24.7453], 13);
 
-    // Add the OpenStreetMap tile layer
+    //Watermark for info about the contributors
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);

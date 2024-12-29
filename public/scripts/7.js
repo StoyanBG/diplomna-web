@@ -25,7 +25,7 @@ function findNextBus() {
 }
 var map = L.map('map').setView([42.1354, 24.7453], 13);
 
-// Add the OpenStreetMap tile layer
+//Watermark for info about the contributors
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);

@@ -1,4 +1,4 @@
-
+// Predefined bus schedule in HH:MM format
 const busSchedule = ['05:50', '06:00', '06:10', '06:20', '06:30', '06:40', '06:50', '07:00', '07:10', '07:20', '07:30',
     '07:40', '07:50', '08:00', '08:10', '08:20', '08:30', '08:40', '08:50', '09:00', '09:10', '09:20', '09:30', '09:40', '09:50',
     '10:00', '10:10', '10:20', '10:30', '10:40', '10:50', '11:00', '11:10', '11:20', '11:30', '11:40', '11:50', '12:00', '12:10',
@@ -7,7 +7,7 @@ const busSchedule = ['05:50', '06:00', '06:10', '06:20', '06:30', '06:40', '06:5
     '17:00', '17:10', '17:20', '17:30', '17:40', '17:50', '18:00', '18:10', '18:20', '18:30', '18:40', '18:50', '19:00', '19:10',
     '19:20', '19:30', '19:40', '19:50', '20:00', '20:10', '20:20', '20:30', '20:40', '20:50', '21:00', '21:10',"21:25"];
 
-     
+// Function to find the next bus
 function findNextBus() {
     const userTimeInput = document.getElementById('userTime').value;
 
@@ -25,7 +25,7 @@ function findNextBus() {
     }
 }
 var map = L.map('map').setView([42.1354, 24.7453], 13);
- 
+//Watermark for info about the contributors
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);

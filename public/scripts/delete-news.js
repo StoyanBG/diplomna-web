@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const token = sessionStorage.getItem('adminToken');
     const newsListElement = document.getElementById('news-list');
-  
+    // Redirect to login page if not logged in
     if (!token) {
       alert('Трябва да сте влезли. Преместване към стрницата за влизане');
-      window.location.href = '/admin-login.html'; // Redirect to login page if not logged in
+      window.location.href = '/admin-login.html'; 
       return;
     }
   

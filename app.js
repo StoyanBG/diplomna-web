@@ -1,3 +1,4 @@
+// Importing required modules
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -11,10 +12,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const app = express();
 
-// CORS middleware
+// Apply CORS middleware to allow cross-origin requests
 app.use(cors({
-  origin: '*',
-  credentials: true
+  origin: '*', // Allow all origins; adjust for production
+  credentials: true // Allow credentials like cookies or headers
 }));
 
 // Middleware for parsing JSON body
@@ -28,7 +29,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Route for user registration
 app.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password } = req.body; // Extract user details from the frontedn request
 
   try {
     // Check if the user already exists
@@ -65,6 +66,7 @@ app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Fetch the user by email from the database
     const user = await getUserByEmail(email);
 
     if (!user) return res.status(404).json({ error: 'Потребителя не е намерен' });
@@ -81,7 +83,10 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Middleware to verify JWT token
+/*
+ * Middleware to Authenticate JWT Tokens
+ * This ensures only authenticated users can access protected routes.
+ */
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Get token from Authorization header
@@ -95,7 +100,10 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// Helper function for interacting with Supabase
+/*
+ * Helper Function to Get User by Email
+ * Queries the database for a user with the specified email address.
+ */
 async function getUserByEmail(email) {
   const { data, error } = await supabase
     .from('users')
@@ -107,7 +115,10 @@ async function getUserByEmail(email) {
   return data;
 }
 
-// Initialize a default admin user if not already present
+/*
+ * Initialize a Default Admin User
+ * Creates a default admin if it doesn't already exist in the database.
+ */
 (async () => {
   const defaultAdminEmail = 'admin@admin.com';
   const defaultAdminPassword = 'admin';
@@ -129,7 +140,7 @@ async function getUserByEmail(email) {
     if (insertError) throw insertError;
   }
 })();
-
+// Logic for the login of the admin
 app.post('/admin-login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -152,7 +163,7 @@ app.post('/admin-login', async (req, res) => {
   }
 });
 
-
+// Fetching avaliable users from the database
 app.get('/users', authenticateToken, async (req, res) => {
   try {
     const { data: users, error } = await supabase
@@ -172,11 +183,12 @@ app.post('/delete-user', authenticateToken, async (req, res) => {
   const { userId } = req.body;
 
   try {
+    //deleting the choices that the user has
     const { errorc } = await supabase
       .from('choices')
       .delete()
       .eq('user_id', userId);
-
+    //deleting the user
     const { error } = await supabase
       .from('users')
       .delete()
@@ -230,7 +242,7 @@ app.get('/get-news', async (req, res) => {
       res.status(500).json({ message: 'Грешка при извличане на новини' });
   }
 });
-
+//Logic for deleting news
 app.delete('/delete-news/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -396,7 +408,7 @@ app.post('/respond-message', authenticateToken, async (req, res) => {
       .insert({
         message_id: messageId,
         responder: responder,
-        responder_name: responderName, // Store the responder's name
+        responder_name: responderName,
         response_message: response,
         created_at: new Date().toISOString(),
       });
@@ -410,7 +422,7 @@ app.post('/respond-message', authenticateToken, async (req, res) => {
   }
 });
 
-// Start the server
+// Start the server (only for localhost but the database won't work without the supabase info)
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:3000`);
 });
