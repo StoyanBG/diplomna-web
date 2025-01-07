@@ -20,7 +20,7 @@ deleteUserForm.addEventListener('submit', async (event) => {
       alert('Успешно изтрит потребител');
       fetchUserList();
     } else {
-      alert('Неуспешно изтриване ан потребител');
+      alert('Неуспешно изтриване на потребител');
     }
   } catch (error) {
     console.error('Имаше грешка при изтриване на потребителя:', error);
